@@ -11,18 +11,7 @@ require(stringr)
 
 ##------------- FUNCTIONS
 
-## Function to put together the command to split the given matrix by tissue
-##    datatype should be either 'read' or 'rpkm'
-##    mapfile should be the file with the sampleID-tissue correspondance
-##    outdir should be the directory to write the new files to
-make.split.command = function(datatype, mapfile, outdir) {
-    comm = paste0('python preprocessing/correction/preprocess_expr_split_by_tissues.py ',
-                  '--gtex ${GTEX_RNAv7}/GTEx_Analysis_v7_RNA-seq_RNA-SeQCv1.1.8_gene_',
-                  datatype, '.gct.gz ',
-                  '--sample ', mapfile, ' --out ', outdir,
-                  ' --end .', datatype, '.txt')
-    return(comm)
-}
+
 
 ## For each tissue, read in the TPM and read files from the given directory.
 ## Subset and reorder columns of TPM file to match the given covariates.
@@ -54,27 +43,15 @@ ztrans.tissue = function(tissue, dir, covs, read.filt = 6, tpm.filt = 0.1) {
 
 ##------------- MAIN
 
-dir = Sys.getenv('RAREDIR')
-peer.dir = paste0(dir, '/preprocessing_v8/PEER_v8/')
+dir = Sys.getenv('TEMPDIR')
+peer.dir = Sys.getenv('OUT')
 pc.file = Sys.getenv('GTEX_PCv8')
 subject.file = Sys.getenv('GTEX_SUBJECTSv8')
 
-## Make output directory if it doesn't exist
-system(paste('mkdir -p', peer.dir))
 
-## Generate file mapping sample identifiers to tissues
-## Restrict to samples that pass RNA-seq QC (marked as RNASEQ in column 28 of the sample file)
-map.file = paste0(dir, '/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt')
-command = paste("cat $GTEX_SAMPLESv8 | tail -n+2",
-                "| cut -f1,14,28 | sed 's/ - /_/' | sed 's/ /_/g'",
-                "| sed 's/(//' | sed 's/)//' | sed 's/c-1/c1/'",
-                "| awk '$3==\"RNASEQ\" {print $1\"\t\"$2}' >", map.file)
-system(command)
+## Import file mapping sample identifiers to tissues -- Restricted to samples that pass RNA-seq QC (marked as RNASEQ in column 28 of the sample file)
+map.file = Sys.getenv('SAMPLE_TISSUES')
 
-## Split the RPKM and read matrices into matrices for each tissue
-# DONE SEPARATELY
-#system(make.split.command('tpm', map.file, peer.dir))
-#system(make.split.command('reads', map.file, peer.dir))
 
 ## Read in list of tissues and keep those with more than 50 samples
 tissue.list = read.table(map.file, header = F, stringsAsFactors = F)[,2]
