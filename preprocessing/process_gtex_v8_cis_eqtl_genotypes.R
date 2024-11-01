@@ -11,7 +11,7 @@ require(reshape2)
 require(plyr)
 
 baseDir = Sys.getenv('TEMPDIR')
-dir = paste0(baseDir, '/preprocessing_v8/eqtl_test')
+dir = paste0(baseDir, '/preprocessing_v8')
 
 #--------------- FUNCTIONS
 

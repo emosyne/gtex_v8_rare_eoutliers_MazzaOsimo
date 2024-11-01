@@ -18,11 +18,11 @@ bedtools intersect -a $TEMPDIR/preprocessing_v8/gtex_2017-06-05_v8_cis_eQTLs.bed
 
 wait
 
-bgzip $TEMPDIR/preprocessing_v8/gtex_v9_genotypes_cis_eQTLs.vcf
+bgzip -f $TEMPDIR/preprocessing_v8/gtex_v9_genotypes_cis_eQTLs.vcf
 
 wait
 
-tabix -p vcf $TEMPDIR/preprocessing_v8/gtex_v9_genotypes_cis_eQTLs.vcf.gz
+tabix -f -p vcf $TEMPDIR/preprocessing_v8/gtex_v9_genotypes_cis_eQTLs.vcf.gz
 
 wait
 ### Convert the cis-eQTL genotypes in VCF format to the number of alternate alleles using VCFTools

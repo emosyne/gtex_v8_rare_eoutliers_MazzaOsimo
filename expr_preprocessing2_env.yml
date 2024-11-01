@@ -1,5 +1,6 @@
 name: expr_preprocessing2
 channels:
+  - bioconda
   - conda-forge
   - defaults
   - https://repo.anaconda.com/pkgs/main
@@ -8,6 +9,7 @@ dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
   - _r-mutex=1.0.1=anacondar_1
+  - bedtools=2.31.1=hf5e1c6e_2
   - binutils_impl_linux-64=2.39=he00db2b_1
   - binutils_linux-64=2.39=h5fc0e48_13
   - bwidget=1.9.14=ha770c72_1
@@ -32,6 +34,7 @@ dependencies:
   - gxx_impl_linux-64=9.5.0=h99780fb_19
   - gxx_linux-64=9.5.0=h43f449f_13
   - harfbuzz=2.7.2=ha5b49bf_1
+  - htslib=1.12=h9093b5e_1
   - icu=67.1=he1b5a44_0
   - jpeg=9e=h0b41bf4_3
   - kernel-headers_linux-64=3.10.0=he073ed8_18
@@ -73,6 +76,7 @@ dependencies:
   - libuuid=2.38.1=h0b41bf4_0
   - libwebp-base=1.4.0=hd590300_0
   - libxcb=1.17.0=h8a09558_0
+  - libxcrypt=4.4.36=hd590300_1
   - libxml2=2.9.10=h68273f3_2
   - libzlib=1.2.13=h4ab18f5_6
   - make=4.4.1=hb9d3cd8_2
@@ -82,6 +86,7 @@ dependencies:
   - pango=1.42.4=h69149e4_5
   - pcre=8.45=h9c3ff4c_0
   - pcre2=10.36=h032f7d1_1
+  - perl=5.32.1=7_hd590300_perl5
   - pixman=0.43.2=h59595ed_0
   - pthread-stubs=0.4=hb9d3cd8_1002
   - python=2.7.15=h5a48372_1011_cpython
@@ -203,9 +208,11 @@ dependencies:
   - setuptools=44.0.0=py27_0
   - sqlite=3.46.0=h6d4b2fc_0
   - sysroot_linux-64=2.17=h4a8ded7_18
+  - tabix=1.11=hdfd78af_0
   - tk=8.6.13=noxft_h4845f30_101
   - tktable=2.10=h8bc8fbc_6
   - tzdata=2024b=hc8b5060_0
+  - vcftools=0.1.16=pl5321hdcf5f25_11
   - wheel=0.37.1=pyhd8ed1ab_0
   - xorg-libice=1.1.1=hb9d3cd8_1
   - xorg-libsm=1.2.4=he73a12e_1

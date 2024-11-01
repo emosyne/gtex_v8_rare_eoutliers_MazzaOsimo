@@ -55,7 +55,7 @@ head ${SAMPLE_TISSUES}
 #split expression by tissue
 python2 $BASEDIR/preprocessing/split_expr_by_tissues.py --gtex $GTEX_expr --out $OUT --sample $SAMPLE_TISSUES --end '.reads.txt'
 
-ll $OUT
+ls $OUT
 
 
 # Creates one file with read counts and one with tpm per tissue in `preprocessing_v8` folder
@@ -74,13 +74,16 @@ export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-
 
 
 bash ../preprocessing/get_eqtl_genotypes.sh
-# Rscript process_gtex_v8_cis_eqtl_genotypes.R
+
+ls $TEMPDIR/preprocessing_v8/
+
+Rscript ../preprocessing/process_gtex_v8_cis_eqtl_genotypes.R
 
 # Generates several intermediate files in `preprocessing_v8` and relies on `process_gtex_v8_cis_eqtl_genotypes.R` to generate final `gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt` in `preprocessing_v8`
 
-# ### Actually run PEER correction and compute residuals
+### Actually run PEER correction and compute residuals
 
-# bash preprocessing/correction/calculate_PEER.sh
+bash ../preprocessing/correction/calculate_PEER.sh
 
 # Relies on `preprocessing/correction/calculate_PEER_factors.R` and `preprocessing/correction/calculate_PEER_residuals.R`.
 
