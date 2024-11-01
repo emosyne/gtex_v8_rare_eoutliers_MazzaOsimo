@@ -18,12 +18,11 @@
 ###SCRIPT STARTS FROM HERE
 
 
-module load miniconda/3
-source activate expr_preprocessing
+source activate expr_preprocessing2
 
 #define variables
 BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
-TEMPDIR=${BASEDIR}/temp_workdir
+export TEMPDIR=${BASEDIR}/temp_workdir
 
 #create folders
 cd ${TEMPDIR}
@@ -34,12 +33,12 @@ mkdir -p paper_figures
 mkdir -p preprocessing_v8
 mkdir -p preprocessing_v8/PEER_v8
 
-GTEX_RNAv8=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/resources/DB/GTEx_expr
-OUT=${TEMPDIR}/preprocessing_v8/PEER_v8
-GTEX=${GTEX_RNAv8}/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
-GTEX_SAMPLES=${GTEX_RNAv8}/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
-SAMPLE_TISSUES=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
-END='.tpm.txt'
+GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
+export OUT=${TEMPDIR}/preprocessing_v8/PEER_v8/
+GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+export SAMPLE_TISSUES=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
+END='.reads.txt'
 
 
 
@@ -52,7 +51,7 @@ cat $GTEX_SAMPLES | tail -n+2 | cut -f1,7,17 | sed 's/ - /_/' | sed 's/ /_/g' | 
 head ${SAMPLE_TISSUES}
 
 #split expression by tissue
-python2 $BASEDIR/preprocessing/split_expr_by_tissues.py --gtex $GTEX --out $OUT --sample $SAMPLE_TISSUES --end $END
+python2 $BASEDIR/preprocessing/split_expr_by_tissues.py --gtex $GTEX_expr --out $OUT --sample $SAMPLE_TISSUES --end $END
 
 ll $OUT
 
@@ -60,10 +59,10 @@ ll $OUT
 # Creates one file with read counts and one with tpm per tissue in `preprocessing_v8` folder
 
 ### Transforming data prior to PEER correction
-GTEX_SUBJECTSv8=${GTEX_RNAv8}/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
-GTEX_PCv8=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/resources/DB/GTEx_WGS/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze_20genotPCs.txt
+export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
+export GTEX_PCs=${GTEX_base}/sample_attrib/phg001796.v1.GTEx_v9.genotype-qc.MULTI/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_support_files/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_953Indiv.20_Genotype_PCs.eigenvec.txt
 
-Rscript preprocessing/MazzaOsimo_preprocess_expr.R
+Rscript ../preprocessing/MazzaOsimo_preprocess_expr.R
 
 
 # ### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles

@@ -4,6 +4,9 @@
 ## then process RPKM and read count matrices so that columns match covariate files.
 ## Prepare matrices for input to PEER.
 
+
+# A set of covariates identified using the Probabilistic Estimation of Expression Residuals (PEER) method                       (Stegle et al., PLoS Comp. Biol., 2010 ), calculated for the normalized expression matrices (described below). For eQTL analyses, the number of PEER factors was determined as function of sample size (N): 15 factors for N<150, 30 factors for 150≤ N<250, 45 factors for 250≤ N<350, and 60 factors for N≥350, as a result of optimizing for the number of eGenes discovered. For sQTL analyses, 15 PEER factors were computed for each tissue.
+
 ## Load required packages
 require(data.table)
 require(ggplot2)
@@ -45,7 +48,7 @@ ztrans.tissue = function(tissue, dir, covs, read.filt = 6, tpm.filt = 0.1) {
 
 dir = Sys.getenv('TEMPDIR')
 peer.dir = Sys.getenv('OUT')
-pc.file = Sys.getenv('GTEX_PCv8')
+pc.file = Sys.getenv('GTEX_PCs')
 subject.file = Sys.getenv('GTEX_SUBJECTSv8')
 
 
