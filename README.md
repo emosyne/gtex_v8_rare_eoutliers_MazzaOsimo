@@ -15,7 +15,7 @@ bash 0_setup.sh
 ```
 This structure is described below.
 ```
-RAREDIR/
+TEMPDIR/
 	data_v8/
 	features_v8/
 	figures/

@@ -4,7 +4,7 @@ library(data.table)
 library(dplyr)
 
 data_dir = '/users/nferraro/data/goats_data/v8_data/'
-baseDir = Sys.getenv('RAREDIR')
+baseDir = Sys.getenv('TEMPDIR')
 print(baseDir)
 
 sp_ws = fread(paste0(baseDir, '/data_v8/watershed/splicing.gam.watershed.rounded.variants.txt'))

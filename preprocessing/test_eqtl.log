@@ -3,7 +3,7 @@ VCFtools - UNKNOWN
 (C) Adam Auton and Anthony Marcketta 2009
 
 Parameters as interpreted:
-	--gzvcf /srv/scratch/restricted/GOATs/preprocessing_v8/eqtl_test/gtex_2017-06-05_v8_genotypes_cis_eQTLs.vcf.gz
+	--gzvcf /srv/scratch/restricted/GOATs/preprocessing_v8/eqtl_test/gtex_v9_genotypes_cis_eQTLs.vcf.gz
 	--maf 0.01
 	--012
 	--out /srv/scratch/restricted/GOATs/preprocessing_v8/eqtl_test/gtex_2017-06-05_v8_genotypes_cis_eQTLs

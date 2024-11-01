@@ -9,7 +9,7 @@ library(ggplot2)
 library(dplyr)
 library(viridis)
 
-dir = Sys.getenv('RAREDIR')
+dir = Sys.getenv('TEMPDIR')
 
 
 source('../paper_figures/plot_settings.R')

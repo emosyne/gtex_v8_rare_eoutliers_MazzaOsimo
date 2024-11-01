@@ -6,12 +6,12 @@ set -o nounset -o pipefail
 scriptdir=`dirname \$(readlink -f "\$0")`
 
 
-dir=${RAREDIR}/features_v8
+dir=${TEMPDIR}/features_v8
 
 indir=${dir}/bySite
-indir_sv=${RAREDIR}/features_v7/variantBeds/individuals
+indir_sv=${TEMPDIR}/features_v7/variantBeds/individuals
 outdir=${dir}/byGene
-gene=${RAREDIR}/preprocessing_v8/gencode.v26.GRCh38.genes.bed
+gene=${TEMPDIR}/preprocessing_v8/gencode.v26.GRCh38.genes.bed
 
 # Make output directory
 mkdir -p ${outdir}

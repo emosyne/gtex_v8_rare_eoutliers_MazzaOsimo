@@ -16,7 +16,7 @@ registerDoMC(cores = 1)
 
 ## Script for combining outlier calls and features then computing enrichments.
 
-baseDir = Sys.getenv('RAREDIR')
+baseDir = Sys.getenv('TEMPDIR')
 
 source('enrichment_functions.R')
 

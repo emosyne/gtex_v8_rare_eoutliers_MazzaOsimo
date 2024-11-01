@@ -8,7 +8,7 @@ require(gplots)
 require(stringr)
 require(data.table)
 
-baseDir = Sys.getenv('RAREDIR')
+baseDir = Sys.getenv('TEMPDIR')
 dir = paste0(baseDir, '/preprocessing_v8')
 
 ##---------------- FUNCTIONS

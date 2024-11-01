@@ -5,7 +5,7 @@ set -o nounset -o errexit
 ## Basic setup of results directory structure.
 ## Assumes that $GOATSDIR is defined and exists.
 
-cd $RAREDIR
+cd $TEMPDIR
 mkdir data_v8
 mkdir features_v8
 mkdir figures

@@ -8,18 +8,18 @@ require(dplyr)
 library(ggplot2)
 
 data_dir = '/users/nferraro/data/goats_data/v8_data/'
-RAREDIR = Sys.getenv('RAREDIR')
+TEMPDIR = Sys.getenv('TEMPDIR')
 
 print('Reading in outliers')
 zthresh = 3
 medz_data = fread(paste0(data_dir, 'gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.medz.txt'))
 medz_data = medz_data %>% mutate(UID = paste(Ind,Gene,sep='_'))
 medz_outliers = medz_data %>% filter(abs(MedZ) > zthresh)
-splicing_data = fread(paste0(RAREDIR, '/data_v8/splicing/cross_tissue_covariate_method_none_no_global_outliers_ea_only_emperical_pvalue_gene_level.txt'))
+splicing_data = fread(paste0(TEMPDIR, '/data_v8/splicing/cross_tissue_covariate_method_none_no_global_outliers_ea_only_emperical_pvalue_gene_level.txt'))
 splicing_data = melt(splicing_data) 
 splicing_data = splicing_data %>% mutate(UID = paste(variable,CLUSTER_ID,sep='_'))
 splicing_outliers = filter(splicing_data,!is.nan(value),value < 2*pnorm(-abs(zthresh)))
-ase_data = melt(fread(paste0(RAREDIR, '/data_v8/ase/combined.ad.scores.in.MEDIAN_4_10_update.tsv')))
+ase_data = melt(fread(paste0(TEMPDIR, '/data_v8/ase/combined.ad.scores.in.MEDIAN_4_10_update.tsv')))
 ase_data = melt(fread(paste0(data_dir, '/ASE/median.ad.scores.uncorrected.no.global.outliers.v8.vg.tsv')))
 colnames(ase_data) = c('GeneID', 'SampleName', 'DOT.score')
 gene.mapper = fread(paste0(data_dir, 'gencode.v26.GRCh38.genes.bed'), header=F)
@@ -30,7 +30,7 @@ ase_data = ase_data %>% mutate(UID = paste(SampleName,Gene,sep='_'))
 ase_outliers = ase_data %>% filter(DOT.score < 2*pnorm(-abs(zthresh)))
 
 print('Reading in variant annotations')
-variant_data = fread(paste0('zcat ', RAREDIR, '/data_v8/variant_annotations/gtex_v8_rare_GxIxV_variant_annotations.txt.gz'),header=T,fill=T)
+variant_data = fread(paste0('zcat ', TEMPDIR, '/data_v8/variant_annotations/gtex_v8_rare_GxIxV_variant_annotations.txt.gz'),header=T,fill=T)
 colnames(variant_data)[5] = 'tier2'
 #variant_data$gene_id = as.character(variant_data$gene_id)
 #variant_data$variant_cat = as.character(variant_data$variant_cat)

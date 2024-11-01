@@ -10,7 +10,7 @@ require(dplyr)
 require(reshape2)
 require(plyr)
 
-baseDir = Sys.getenv('RAREDIR')
+baseDir = Sys.getenv('TEMPDIR')
 dir = paste0(baseDir, '/preprocessing_v8/eqtl_test')
 
 #--------------- FUNCTIONS

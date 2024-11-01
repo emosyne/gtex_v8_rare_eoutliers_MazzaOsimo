@@ -21,7 +21,7 @@ else
 fi
 
 ## set output directory
-dir=${RAREDIR}/features_v8
+dir=${TEMPDIR}/features_v8
 
 outdir=${dir}/bySite
 AF_SVS=${AF_SVs}

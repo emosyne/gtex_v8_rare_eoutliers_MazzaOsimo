@@ -12,7 +12,7 @@ require(doMC)
 registerDoMC(cores = 3)
 
 data_dir = '/users/nferraro/data/goats_data/v8_data/'
-goats_dir = Sys.getenv('RAREDIR')
+goats_dir = Sys.getenv('TEMPDIR')
 
 print('Reading in outliers')
 zthresh = 3

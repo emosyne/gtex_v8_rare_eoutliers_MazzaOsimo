@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-#SBATCH -J eoutliers_calc
+#SBATCH -J eoutliers_calc_scz_mazzaosimo
 #SBATCH -A MURRAY-SL2-CPU
 #SBATCH -p cclake
 #SBATCH --nodes=1
@@ -9,6 +9,8 @@
 #SBATCH --ntasks=16
 #SBATCH --mem=32G
 #SBATCH --time=1:00:00
+#SBATCH --mail-user=efo22@cam.ac.uk
+#SBATCH --mail-type=BEGIN,END,FAIL
 
 #! sbatch directives end here (put any additional directives above this line)
 
@@ -21,7 +23,8 @@
 source activate expr_preprocessing2
 
 #define variables
-BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
+export BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
+## Results paths
 export TEMPDIR=${BASEDIR}/temp_workdir
 
 #create folders
@@ -33,12 +36,11 @@ mkdir -p paper_figures
 mkdir -p preprocessing_v8
 mkdir -p preprocessing_v8/PEER_v8
 
-GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
+export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
 export OUT=${TEMPDIR}/preprocessing_v8/PEER_v8/
-GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
-GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
 export SAMPLE_TISSUES=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
-END='.reads.txt'
 
 
 
@@ -51,7 +53,7 @@ cat $GTEX_SAMPLES | tail -n+2 | cut -f1,7,17 | sed 's/ - /_/' | sed 's/ /_/g' | 
 head ${SAMPLE_TISSUES}
 
 #split expression by tissue
-python2 $BASEDIR/preprocessing/split_expr_by_tissues.py --gtex $GTEX_expr --out $OUT --sample $SAMPLE_TISSUES --end $END
+python2 $BASEDIR/preprocessing/split_expr_by_tissues.py --gtex $GTEX_expr --out $OUT --sample $SAMPLE_TISSUES --end '.reads.txt'
 
 ll $OUT
 
@@ -65,9 +67,14 @@ export GTEX_PCs=${GTEX_base}/sample_attrib/phg001796.v1.GTEx_v9.genotype-qc.MULT
 Rscript ../preprocessing/MazzaOsimo_preprocess_expr.R
 
 
-# ### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles
+### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles
+## restricted data:
+export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_944Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
 
-# bash get_eqtl_genotypes.sh
+
+
+bash ../preprocessing/get_eqtl_genotypes.sh
+# Rscript process_gtex_v8_cis_eqtl_genotypes.R
 
 # Generates several intermediate files in `preprocessing_v8` and relies on `process_gtex_v8_cis_eqtl_genotypes.R` to generate final `gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt` in `preprocessing_v8`
 

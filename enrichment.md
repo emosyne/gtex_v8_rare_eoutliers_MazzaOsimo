@@ -1,14 +1,14 @@
 Feature enrichment
 ====================
 
-All paths for created files are relative to `$RAREDIR` unless otherwise noted.
+All paths for created files are relative to `$TEMPDIR` unless otherwise noted.
 
 For GTEx v8 samples
 -------------------
 
 ### Calculate relative risk of rare variants nearby outliers
 Collect features for outliers and controls and assess feature enrichment in outliers vs. controls.
-Saves the outliers and enrichments in an RData file (`$RAREDIR/data_v8/outliers/enrichments_10kb_genebody_Z3.RData`).
+Saves the outliers and enrichments in an RData file (`$TEMPDIR/data_v8/outliers/enrichments_10kb_genebody_Z3.RData`).
 ```
 Rscript enrichment/compute_enrichments_MEDZ.R \
 	--dir.suffix v8 \

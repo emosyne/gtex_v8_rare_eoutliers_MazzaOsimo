@@ -1,7 +1,7 @@
 Feature construction
 ====================
 
-All paths for created files are relative to `$RAREDIR` unless otherwise noted.
+All paths for created files are relative to `$TEMPDIR` unless otherwise noted.
 
 Basic processing of annotation files
 ------------------------------------

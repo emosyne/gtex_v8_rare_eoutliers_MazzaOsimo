@@ -142,7 +142,7 @@ echo "Processing SNPs and indels..."
 parallel --jobs $nproc makecountfeatures ::: ${indir}/*_features.bed.gz ::: T
 
 echo "Processing SVs..."
-svdir=${RAREDIR}/features_v7/variantBeds/individuals/HallLabSV_hg38
+svdir=${TEMPDIR}/features_v7/variantBeds/individuals/HallLabSV_hg38
 parallel --jobs $nproc makecountfeatures ::: ${svdir}/GTEX-*_HallLabSV.bed.gz ::: F
 
 echo "Processing all rare variants together into a single file for each variant type..."

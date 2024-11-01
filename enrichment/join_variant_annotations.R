@@ -8,7 +8,7 @@ library(ggplot2)
 require(RColorBrewer)
 library(argparse)
 
-RAREDIR = Sys.getenv('RAREDIR')
+TEMPDIR = Sys.getenv('TEMPDIR')
 
 parser = ArgumentParser()
 parser$add_argument('--method', help = 'Method')
@@ -42,11 +42,11 @@ get_bin <- function(pval) {
 }
 
 if (method == 'medz') {
-  medz_outliers = fread(paste0(RAREDIR, '/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.medz.txt'))
+  medz_outliers = fread(paste0(TEMPDIR, '/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.medz.txt'))
   colnames(medz_outliers)[1:2] = c('indiv_id','gene_id')
   medz_outliers$indiv_id = sapply(medz_outliers$indiv_id, function(x) strsplit(x,'GTEX-')[[1]][2])
 } else if (method == 'splicing') {
-  splicing_outliers = fread(paste0(RAREDIR, '/data_v8/splicing/cross_tissue_covariate_method_none_no_global_outliers_ea_only_emperical_pvalue_gene_level.txt'))
+  splicing_outliers = fread(paste0(TEMPDIR, '/data_v8/splicing/cross_tissue_covariate_method_none_no_global_outliers_ea_only_emperical_pvalue_gene_level.txt'))
   splicing_melted = melt(splicing_outliers)
   splicing_melted = filter(splicing_melted,!is.nan(value))
   splicing_bins = sapply(splicing_melted$value, function(x) get_bin(x))
@@ -57,7 +57,7 @@ if (method == 'medz') {
   outlier_genes = filter(splicing_melted,pval_bin!='nonOutlier')$gene_id
   splicing_melted = filter(splicing_melted,gene_id %in% outlier_genes)
 } else if (method == 'ase') {
-  #ase_data = fread(paste0(RAREDIR, '/data_v8/ase/combined.ad.scores.in.MEDIAN_4_10_update.tsv'))
+  #ase_data = fread(paste0(TEMPDIR, '/data_v8/ase/combined.ad.scores.in.MEDIAN_4_10_update.tsv'))
   ase_data = fread('/users/nferraro/data/goats_data/v8_data/ASE/median.ad.scores.uncorrected.no.global.outliers.v8.vg.tsv', stringsAsFactors=F)
   ase_outliers = melt(ase_data)
   ase_outliers$pval_bin = sapply(ase_outliers$value, function(x) ifelse(is.na(x), NA, get_bin(x)))
@@ -73,7 +73,7 @@ if (method == 'medz') {
   colnames(ase_outliers)[1] = 'gene_id'
   
 } else {
-  cor_data = fread(paste0(RAREDIR, '/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.subset.newParams.knn.txt'))
+  cor_data = fread(paste0(TEMPDIR, '/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.subset.newParams.knn.txt'))
   cor_outliers = filter(cor_data,Y=='outlier',FDR < 0.01)
   cor_controls = filter(cor_data, Gene %in% cor_outliers$Gene, Y=='control')
   cor_bins = sapply(cor_outliers$FDR, function(x) get_bin(x))
@@ -88,17 +88,17 @@ variant_file = read.table('/users/xli6/projects/gtex/annotation/combined/gtex_v8
 variant_file$gene_id = as.character(variant_file$gene_id)
 if (method == 'medz') {
   medz_variants = merge(medz_outliers,variant_file,by=c('indiv_id','gene_id'),all.x=T)
-  write.table(medz_variants,file=paste0(RAREDIR,'/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.medz.lncRNA.variantAnnotations.withPromoter.txt'),sep='\t',quote=F,row.names=F)
+  write.table(medz_variants,file=paste0(TEMPDIR,'/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.medz.lncRNA.variantAnnotations.withPromoter.txt'),sep='\t',quote=F,row.names=F)
 } else if (method == 'splicing') {
   splice_variants = merge(splicing_melted,variant_file,by=c('indiv_id','gene_id'),all.x=T)
-  write.table(splice_variants,file=paste0(RAREDIR,'/data_v8/splicing/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.splice.variantAnnotations.withPromoter.txt'),sep='\t',quote=F,row.names=F)
+  write.table(splice_variants,file=paste0(TEMPDIR,'/data_v8/splicing/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.splice.variantAnnotations.withPromoter.txt'),sep='\t',quote=F,row.names=F)
 } else if (method == 'ase') {
   print(ase_outliers[1,])
   print(variant_file[1,])
   ase_variants = merge(ase_outliers,variant_file,by=c('indiv_id','gene_id'),all.x=T)
-  write.table(ase_variants,file=paste0(RAREDIR,'/data_v8/ase/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.ase.variantAnnotations.v8.vg.txt'),sep='\t',quote=F,row.names=F)
+  write.table(ase_variants,file=paste0(TEMPDIR,'/data_v8/ase/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.ase.variantAnnotations.v8.vg.txt'),sep='\t',quote=F,row.names=F)
 } else {
   cor_variants = merge(cor_outliers,variant_file,by=c('indiv_id','gene_id'),all.x=T)
-  write.table(cor_variants,file=paste0(RAREDIR,'/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.knn.variantAnnotations.txt'),sep='\t',quote=F,row.names=F)
+  write.table(cor_variants,file=paste0(TEMPDIR,'/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed.knn.variantAnnotations.txt'),sep='\t',quote=F,row.names=F)
 }
 

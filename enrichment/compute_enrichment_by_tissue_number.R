@@ -4,7 +4,7 @@ library(data.table)
 library(dplyr)
 library(epitools)
 
-goats_dir = Sys.getenv('RAREDIR')
+goats_dir = Sys.getenv('TEMPDIR')
 data_dir = '/users/nferraro/data/goats_data/v8_data/'
 
 exp_outliers = fread(paste0(goats_dir, '/data_v8/outliers/gtexV8.expression.outliers.across.tissue.numbers.N5.txt')) %>% select(Gene,Tissue,variable,value,NT,NO)

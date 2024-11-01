@@ -15,7 +15,7 @@
 # * $KG_AF_INDELS (8 cols, with chr)
 # * $KG_AF_SNPS (ditto)
 # * $STATEDIR/[prom/dyadic/enh]/*.bed.gz (3 cols, with chr)
-# * $RAREDIR/features_v7/er.tissue.map.txt (first column has names of tissues groups)
+# * $TEMPDIR/features_v7/er.tissue.map.txt (first column has names of tissues groups)
 
 set -o nounset -o errexit -o pipefail
 
@@ -48,7 +48,7 @@ echo $ind
 ##################################
 
 # get prefixes of enhancer files
-#tissues=`cat ${RAREDIR}/features_v7/er.tissue.map.txt | tail -n +2 | cut -f1`
+#tissues=`cat ${TEMPDIR}/features_v7/er.tissue.map.txt | tail -n +2 | cut -f1`
 
 # put together command for intersect with variant bed files
 # remove last two columns if SNVs
@@ -78,14 +78,14 @@ echo $ind
 
 
 cmd="zcat $f | awk 'BEGIN{OFS=\"\t\"}{if(NF==7){print \$1,\$2,\$3,\$4,\$5} else {print \$0}}' |"
-#cmd="${cmd} intersectBed -wa -wb -a stdin -b ${RAREDIR}/preprocessing_v8/gtex_v8.core15.127.filtered.enhancers.binary.txt.gz |" # removed -sorted
-cmd="${cmd} intersectBed -wa -wb -a stdin -b ${RAREDIR}/preprocessing_v8/gtex_v8.core15.127.filtered.enhancers.txt.gz |" # removed -sorted
+#cmd="${cmd} intersectBed -wa -wb -a stdin -b ${TEMPDIR}/preprocessing_v8/gtex_v8.core15.127.filtered.enhancers.binary.txt.gz |" # removed -sorted
+cmd="${cmd} intersectBed -wa -wb -a stdin -b ${TEMPDIR}/preprocessing_v8/gtex_v8.core15.127.filtered.enhancers.txt.gz |" # removed -sorted
 cmd="${cmd} intersectBed -wa -wb -loj -a stdin -b ${kgfile} | sed 's/\t\t/\t/g' |" # removed -sorted
 cmd="${cmd} sed 's/\t\./\tNA/g' | cut -f1-4,9-37,41 | gzip -c > ${outdir}/${ind}_chromHMM.bed.gz"
 #cmd="${cmd} sed 's/\t\./\tNA/g' | cut -f1-5,9-26,30 | gzip -c > ${outdir}/${ind}_chromHMM.bed.gz" # used in enhancersNew
 
 #cmd="zcat $f | awk 'BEGIN{OFS=\"\t\"}{if(NF==7){print \$1,\$2,\$3,\$4,\$5} else {print \$0}}' |"
-#cmd="${cmd} intersectBed -wa -c -a stdin -b ${RAREDIR}/preprocessing_v8/gtex_v8.core15.127.filtered.enhancers.binary.txt |" # removed -sorted
+#cmd="${cmd} intersectBed -wa -c -a stdin -b ${TEMPDIR}/preprocessing_v8/gtex_v8.core15.127.filtered.enhancers.binary.txt |" # removed -sorted
 #cmd="${cmd} intersectBed -wa -wb -loj -a stdin -b ${kgfile} | sed 's/\t\t/\t/g' |" # removed -sorted
 #cmd="${cmd} awk 'BEGIN{roadmapEnd=17}{for(i=1; i<=roadmapEnd; i++){ printf(\"%s\t\",\$i)}; 
 #         for(i=roadmapEnd+4; i<NF; i++){ printf(\"%s\t\",\$i)}; print \$NF}' |"

@@ -3,7 +3,7 @@
 # Single tissue outliers
 
 ## Get path to the GOATs data directories
-dir = Sys.getenv('RAREDIR')
+dir = Sys.getenv('TEMPDIR')
 
 ## Load required packages
 require(data.table)

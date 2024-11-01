@@ -13,7 +13,7 @@ import os
 import numpy as np
 from operator import itemgetter
 
-dir = os.environ["RAREDIR"]
+dir = os.environ["TEMPDIR"]
 dir = dir + '/preprocessing_v8/'
 tissueNamesFile = dir + 'gtex_2017-06-05_tissues_all_normalized_samples.txt'
 individualsFile = dir + 'gtex_2017-06-05_individuals_all_normalized_samples.txt'

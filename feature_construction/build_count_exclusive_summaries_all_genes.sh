@@ -74,7 +74,7 @@ if [ $windowstart -eq 0 ]; then
         awk 'BEGIN {OFS="\t"} { if ($2!=0 && $3!=0) print $1,$2,$3,$4}' | \
         awk 'BEGIN {OFS="\t"} { if ($1 != "chrM") print $1,$2,$3,$4}' > genetemp.txt
 else
-    bedtools flank -i $gene -g ${RAREDIR}/preprocessing_v8/chrom_length_dummy.txt -b $windowend | \
+    bedtools flank -i $gene -g ${TEMPDIR}/preprocessing_v8/chrom_length_dummy.txt -b $windowend | \
         awk -v lb=$windowstart 'BEGIN {OFS="\t"} { if (NR % 2 == 1) print $1,$2,$3-lb,$4; else print $1,$2+lb,$3,$4}' | \
         awk 'BEGIN {OFS="\t"} { if ($3>0) print $1,$2,$3,$4; else print $1,$2,0,$4}' | \
         awk 'BEGIN {OFS="\t"} { if ($2!=0 && $3!=0) print $1,$2,$3,$4}' | \
@@ -204,7 +204,7 @@ echo "Processing SNPs and indels..."
 parallel --jobs $nproc makecountfeatures ::: ${indir}/*_features.bed.gz ::: T
 
 echo "Processing SVs..."
-svdir=${RAREDIR}/features_v7/variantBeds/individuals/HallLabSV_hg38
+svdir=${TEMPDIR}/features_v7/variantBeds/individuals/HallLabSV_hg38
 parallel --jobs $nproc makecountfeatures ::: ${svdir}/GTEX-*_HallLabSV.bed.gz ::: F
 
 echo "all done!"

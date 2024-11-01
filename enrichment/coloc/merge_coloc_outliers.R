@@ -104,7 +104,7 @@ medz_top_coloc_traits = medz_top %>% group_by(trait) %>%
 # gtex_meta = fread('/Users/nicoleferraro/durga_local/data/goats_data/v8_data/GTEx_Analysis_2017-06-05_v8_Annotations_SubjectPhenotypesDS.txt')
 
 # Checking distribution of AFs of relevant variants
-gdir = Sys.getenv('RAREDIR')
+gdir = Sys.getenv('TEMPDIR')
 colnames(enloc_sum)[5] = 'prob'
 colnames(coloc_sum)[5] = 'prob'
 all_rare_SNPs = fread(paste0(gdir, '/features_v8/byGene/10kb_genebody/all_rare_variants_SNPs_10kb_genebody.txt'),header=F)

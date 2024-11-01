@@ -7,13 +7,13 @@ set -o nounset
 # get current working directory of the script
 scriptdir=`dirname \$(readlink -f "\$0")`
 
-vcf=$GTEX_WGSv8
-indincl=${RAREDIR}/preprocessing_v8/gtex_2017-06-05_v8_euro_ids.txt
+vcf=$GTEX_WGS
+indincl=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_euro_ids.txt
 # get individual IDs from subject files - only european ancestry
 # first exclude flagged individuals based on wgs data
-cat $GTEX_WGSv8_flagged | tail -n +2 | awk '{split($1, id, "-"); print id[1]"-"id[2]}' | \
+cat $GTEX_WGS_flagged | tail -n +2 | awk '{split($1, id, "-"); print id[1]"-"id[2]}' | \
     grep -v -f - $GTEX_SUBJECTSv8 | awk -F "\t" '$5==3 {print $1}' > $indincl
-beddir=${RAREDIR}/features_v8/variantBeds
+beddir=${TEMPDIR}/features_v8/variantBeds
 
 # create output directory if it doesn't exist
 mkdir -p $beddir

@@ -7,7 +7,7 @@ set -o nounset -o errexit -o pipefail
 ## only looking at SNVs that are seen in GTEx and that pass filter
 ##TODO:with MAF <= 0.01
 
-dir=${RAREDIR}/features_v8
+dir=${TEMPDIR}/features_v8
 outdir=${dir}/gnomad
 gtexsnv=${dir}/variantBeds/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.SHAPEIT2_phased_subset_SNPs_noChr.frq
 gtexindel=${dir}/variantBeds/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.SHAPEIT2_phased_subset_indels_noChr.frq

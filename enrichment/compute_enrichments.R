@@ -9,7 +9,7 @@ library(argparse)
 
 ## Script for combining outlier calls and features then computing enrichments.
 
-baseDir = Sys.getenv('RAREDIR')
+baseDir = Sys.getenv('TEMPDIR')
 
 source('enrichment/enrichment_functions.R')
 

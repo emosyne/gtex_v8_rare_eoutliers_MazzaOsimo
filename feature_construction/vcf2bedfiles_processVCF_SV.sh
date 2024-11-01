@@ -18,7 +18,7 @@ vcfSVreformat=${outdir}/gtex.lumpy.gs.svscore.high_conf_reformattedMissingGT.vcf
 vcfCNV=${outdir}/gtex.lumpy.gs.svscore.high_conf_GSonly.vcf
 
 # individuals to include from the allele frequency calculation
-indincl=${RAREDIR}/preprocessing/gtex_2016-01-15_v7_euro_VCFids.txt # only the (123) EA individuals
+indincl=${TEMPDIR}/preprocessing/gtex_2016-01-15_v7_euro_VCFids.txt # only the (123) EA individuals
 
 # fix SV vcf such that the missing genotypes are ./. instead of .
 zcat $vcfSV | sed "s%\t\.:%\t./.:%g" | sed 's/""/"/g' > $vcfSVreformat

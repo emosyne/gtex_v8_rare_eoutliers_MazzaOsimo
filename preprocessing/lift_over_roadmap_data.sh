@@ -3,7 +3,7 @@
 #Run liftover for all dnase files from hg19 to hg38
 #Assumes both hg19tohg38 chain file and liftOver executable have been downloaded
 
-CHAIN=$RAREDIR/preprocessing_v8/hg19ToHg38.over.chain.gz
+CHAIN=$TEMPDIR/preprocessing_v8/hg19ToHg38.over.chain.gz
 dtype=dyadic
 OUTDIR=$ANNODIR/epigenomicsRoadmap/hg38/$dtype/
 for FILE in $(ls $ANNODIR/epigenomicsRoadmap/$dtype/*.bed.gz)

@@ -5,7 +5,7 @@
 ## Subsequent columns have Z-score data for each individual and the individual ID is the column name.
 
 ## Get path to the GOATs data directories
-dir = Sys.getenv('RAREDIR')
+dir = Sys.getenv('TEMPDIR')
 
 ## Load required packages
 require(data.table)

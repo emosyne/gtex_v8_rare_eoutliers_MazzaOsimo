@@ -9,7 +9,7 @@ library(epitools)
 
 ## Script for combining outlier calls and features then computing enrichments.
 
-baseDir = Sys.getenv('RAREDIR')
+baseDir = Sys.getenv('TEMPDIR')
 
 data_dir = '/users/nferraro/data/goats_data/v8_data/'
 exp_single_files = dir(paste0(baseDir, '/preprocessing_v8/PEER_v8'), '*.peer.v8ciseQTLs.ztrans.txt', full=T)

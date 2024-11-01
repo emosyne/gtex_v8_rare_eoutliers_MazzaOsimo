@@ -4,15 +4,15 @@
 ## source <path to repo>/paths
 
 ## GTEx data paths
-export GTEXv8=/mnt/lab_data/montgomery/shared/datasets/gtex/GTEx_Analysis_2017-06-05_v8
-export GTEX_WGSv8=${GTEXv8}/genotypes/WGS/variant_calls/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
-export GTEX_WGSv8_flagged=${GTEXv8}/genotypes/WGS/variant_calls/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_support_files/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_flagged_donors.txt
-export GTEX_RNAv8=${GTEXv8}/rna_seq
-export GTEX_ASEv8=${GTEXv8}/ase/GTEx_Analysis_v8_ASE_counts_by_subject
-export GTEX_SAMPLESv8=${GTEXv8}/sample_annotations/GTEx_Analysis_2017-06-05_v8_Annotations_SampleAttributesDS.txt
-export GTEX_SUBJECTSv8=${GTEXv8}/sample_annotations/GTEx_Analysis_2017-06-05_v8_Annotations_SubjectPhenotypesDS.txt
-export GTEX_PCv8=${GTEXv8}/genotypes/WGS/variant_calls/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_support_files/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze_20genotPCs.txt
-export GTEX_GENES=${GTEXv8}/references/gencode.v26.GRCh38.genes.gtf
+export GTEX_base=/mnt/lab_data/montgomery/shared/datasets/gtex/GTEx_Analysis_2017-06-05_v8
+export GTEX_WGS=${GTEX_base}/genotypes/WGS/variant_calls/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
+export GTEX_WGS_flagged=${GTEX_base}/genotypes/WGS/variant_calls/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_support_files/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_flagged_donors.txt
+export GTEX_RNAv8=${GTEX_base}/rna_seq
+export GTEX_ASEv8=${GTEX_base}/ase/GTEx_Analysis_v8_ASE_counts_by_subject
+export GTEX_SAMPLESv8=${GTEX_base}/sample_annotations/GTEx_Analysis_2017-06-05_v8_Annotations_SampleAttributesDS.txt
+export GTEX_SUBJECTSv8=${GTEX_base}/sample_annotations/GTEx_Analysis_2017-06-05_v8_Annotations_SubjectPhenotypesDS.txt
+export GTEX_PCv8=${GTEX_base}/genotypes/WGS/variant_calls/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_support_files/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze_20genotPCs.txt
+export GTEX_GENES=${GTEX_base}/references/gencode.v26.GRCh38.genes.gtf
 
 ## Supporting data paths
 export KGDIR=/mnt/lab_data/montgomery/shared/1KG
@@ -20,7 +20,7 @@ export CADD=/mnt/lab_data/montgomery/shared/CADD/whole_genome_SNVs.tsv.gz
 export GNOMAD=/mnt/lab_data/montgomery/shared/datasets/gnomad/release2.0.2/vcf/genomes/liftover_grch38
 
 ## Results paths
-export RAREDIR=/srv/scratch/restricted/GOATs
+export TEMPDIR=/srv/scratch/restricted/GOATs
 
 ## Paths to annotation files used in the feature creation pipeline
 export ANNODIR=/srv/scratch/restricted/goats/features/annotations # maybe change this for future version
