@@ -22,8 +22,21 @@
 
 source activate expr_preprocessing2
 
+
+
+
+
 #define variables
 export BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
+export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
+export OUT=${TEMPDIR}/preprocessing_v8/PEER_v8/
+export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+export SAMPLE_TISSUES=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
+export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
+export GTEX_PCs=${GTEX_base}/sample_attrib/phg001796.v1.GTEx_v9.genotype-qc.MULTI/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_support_files/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_953Indiv.20_Genotype_PCs.eigenvec.txt
+## restricted data:
+export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_944Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
 ## Results paths
 export TEMPDIR=${BASEDIR}/temp_workdir
 
@@ -35,14 +48,6 @@ mkdir -p figures
 mkdir -p paper_figures
 mkdir -p preprocessing_v8
 mkdir -p preprocessing_v8/PEER_v8
-
-export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
-export OUT=${TEMPDIR}/preprocessing_v8/PEER_v8/
-export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
-export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
-export SAMPLE_TISSUES=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
-
-
 
 
 #create sample tissues file
@@ -61,15 +66,11 @@ ls $OUT
 # Creates one file with read counts and one with tpm per tissue in `preprocessing_v8` folder
 
 ### Transforming data prior to PEER correction
-export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
-export GTEX_PCs=${GTEX_base}/sample_attrib/phg001796.v1.GTEx_v9.genotype-qc.MULTI/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_support_files/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_953Indiv.20_Genotype_PCs.eigenvec.txt
 
 Rscript ../preprocessing/MazzaOsimo_preprocess_expr.R
 
 
 ### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles
-## restricted data:
-export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_944Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
 
 
 

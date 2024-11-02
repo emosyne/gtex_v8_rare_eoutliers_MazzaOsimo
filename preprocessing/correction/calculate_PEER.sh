@@ -56,6 +56,6 @@ export scriptdir
 export peerdir
 export gtex_eqtl_dir
 
-parallel --jobs 10 runPeer ::: ${peerdir}/*.tpm.log2.ztrans.txt
+parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
 
 echo "DONE!"
