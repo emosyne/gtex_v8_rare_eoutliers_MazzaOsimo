@@ -19,13 +19,11 @@
 
 ###SCRIPT STARTS FROM HERE
 
-
-source activate expr_preprocessing2
-
+source activate expr_preprocessing_bash_py2_env
 
 
-
-
+## Results paths
+export TEMPDIR=${BASEDIR}/temp_workdir
 #define variables
 export BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
 export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
@@ -37,8 +35,7 @@ export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_S
 export GTEX_PCs=${GTEX_base}/sample_attrib/phg001796.v1.GTEx_v9.genotype-qc.MULTI/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_support_files/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_953Indiv.20_Genotype_PCs.eigenvec.txt
 ## restricted data:
 export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_944Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
-## Results paths
-export TEMPDIR=${BASEDIR}/temp_workdir
+
 
 #create folders
 cd ${TEMPDIR}
@@ -57,6 +54,8 @@ cat $GTEX_SAMPLES | tail -n+2 | cut -f1,7,17 | sed 's/ - /_/' | sed 's/ /_/g' | 
 
 head ${SAMPLE_TISSUES}
 
+
+
 #split expression by tissue
 python2 $BASEDIR/preprocessing/split_expr_by_tissues.py --gtex $GTEX_expr --out $OUT --sample $SAMPLE_TISSUES --end '.reads.txt'
 
@@ -67,22 +66,32 @@ ls $OUT
 
 ### Transforming data prior to PEER correction
 
+conda deactivate
+source activate eoutliers_calc_R_env
+
 Rscript ../preprocessing/MazzaOsimo_preprocess_expr.R
 
 
 ### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles
 
-
+conda deactivate
+source activate expr_preprocessing_bash_py2_env
 
 bash ../preprocessing/get_eqtl_genotypes.sh
 
 ls $TEMPDIR/preprocessing_v8/
+
+conda deactivate
+source activate eoutliers_calc_R_env
 
 Rscript ../preprocessing/process_gtex_v8_cis_eqtl_genotypes.R
 
 # Generates several intermediate files in `preprocessing_v8` and relies on `process_gtex_v8_cis_eqtl_genotypes.R` to generate final `gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt` in `preprocessing_v8`
 
 ### Actually run PEER correction and compute residuals
+
+conda deactivate
+source activate expr_preprocessing_bash_py2_env
 
 bash ../preprocessing/correction/calculate_PEER.sh
 
