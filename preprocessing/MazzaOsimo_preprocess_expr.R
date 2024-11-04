@@ -22,8 +22,8 @@ require(stringr)
 ## Log2(tpm + 2) transform the data, then z-transform.
 ## Finally, output the transformed matrix to a new file.
 ztrans.tissue = function(tissue, dir, covs, read.filt = 6, tpm.filt = 0.1) {
-    tpm = fread(paste0(dir, tissue, '.tpm.txt'))
-    reads = fread(paste0(dir, tissue, '.reads.txt'))
+    tpm = fread(paste0(dir, '/', tissue, '.tpm.txt'))
+    reads = fread(paste0(dir, '/', tissue, '.reads.txt'))
     ## sanity checks
     stopifnot(sum(colnames(tpm) != colnames(reads)) == 0)
     stopifnot(sum(tpm$Gene != reads$Gene) == 0)
