@@ -8,7 +8,7 @@
 #! 3420 MiB of memory per CPU.
 #SBATCH --ntasks=16
 #SBATCH --mem=32G
-#SBATCH --time=2:00:00
+#SBATCH --time=6:00:00
 #SBATCH --mail-user=efo22@cam.ac.uk
 #SBATCH --mail-type=BEGIN,END,FAIL
 

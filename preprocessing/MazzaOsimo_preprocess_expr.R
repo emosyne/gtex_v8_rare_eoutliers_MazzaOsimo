@@ -47,7 +47,7 @@ ztrans.tissue = function(tissue, dir, covs, read.filt = 6, tpm.filt = 0.1) {
 ##------------- MAIN
 
 dir = Sys.getenv('TEMPDIR')
-peer.dir = Sys.getenv('OUT')
+peer.dir = Sys.getenv('peerdir')
 pc.file = Sys.getenv('GTEX_PCs')
 subject.file = Sys.getenv('GTEX_SUBJECTSv8')
 
