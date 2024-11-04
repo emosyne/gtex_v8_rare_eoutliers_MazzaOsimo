@@ -3,8 +3,9 @@
 rm(list = ls())
 
 require(data.table)
-require(dplyr)
 require(plyr)
+require(dplyr)
+
 
 #-------------- MAIN
 

@@ -8,7 +8,7 @@
 #! 3420 MiB of memory per CPU.
 #SBATCH --ntasks=16
 #SBATCH --mem=32G
-#SBATCH --time=1:00:00
+#SBATCH --time=2:00:00
 #SBATCH --mail-user=efo22@cam.ac.uk
 #SBATCH --mail-type=BEGIN,END,FAIL
 
@@ -18,14 +18,15 @@
 
 
 ###SCRIPT STARTS FROM HERE
-
+source /home/efo22/miniconda3/etc/profile.d/conda.sh
 source activate expr_preprocessing_bash_py2_env
 
 
+export BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
 ## Results paths
 export TEMPDIR=${BASEDIR}/temp_workdir
 #define variables
-export BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
+
 export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
 export OUT=${TEMPDIR}/preprocessing_v8/PEER_v8/
 export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz

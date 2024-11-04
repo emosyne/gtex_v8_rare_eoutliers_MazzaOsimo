@@ -40,9 +40,6 @@ runPeer() {
     mkdir -p $outdir
 
     ## actual calculation of peer factors
-    conda deactivate
-    source activate eoutliers_calc_R_env
-    
     echo "Rscript calculate_PEER_factors.R $traitsFileName $maxFactorsN $maxIterations $boundTol $varTol $e_pa $e_pb $a_pa $a_pb $outdir $tissue" > ${outdir}/log.txt
     Rscript ${scriptdir}/calculate_PEER_factors.R $traitsFileName $maxFactorsN $maxIterations \
             $boundTol $varTol $e_pa $e_pb $a_pa $a_pb $outdir $tissue >> ${outdir}/log.txt 2>&1
@@ -53,8 +50,6 @@ runPeer() {
         $TEMPDIR/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt \
         ${prefix}.peer.v8ciseQTLs.ztrans.txt &> ${outdir}/log.residuals.txt  
     
-    conda deactivate
-    source activate expr_preprocessing_bash_py2_env
 }
 
 export -f runPeer
