@@ -62,6 +62,7 @@ head ${SAMPLE_TISSUES}
 
 
 #split expression by tissue
+echo "running split_expr_by_tissues.py"
 python2 ${scriptdir}/split_expr_by_tissues.py --gtex $GTEX_expr --out ${peerdir} --sample $SAMPLE_TISSUES --end '.reads.txt'
 
 ls ${peerdir} 
@@ -73,7 +74,7 @@ ls ${peerdir}
 
 conda deactivate
 source activate eoutliers_calc_R_env
-
+echo "running MazzaOsimo_preprocess_expr.R"
 Rscript ${scriptdir}/MazzaOsimo_preprocess_expr.R
 
 
@@ -81,21 +82,21 @@ Rscript ${scriptdir}/MazzaOsimo_preprocess_expr.R
 
 conda deactivate
 source activate expr_preprocessing_bash_py2_env
-
+echo "running get_eqtl_genotypes.sh"
 bash ${scriptdir}/get_eqtl_genotypes.sh
 
 ls $TEMPDIR/preprocessing_v8/
 
 conda deactivate
 source activate eoutliers_calc_R_env
-
+echo "running process_gtex_v8_cis_eqtl_genotypes.R"
 Rscript ${scriptdir}/process_gtex_v8_cis_eqtl_genotypes.R
 
 # Generates several intermediate files in `preprocessing_v8` and relies on `process_gtex_v8_cis_eqtl_genotypes.R` to generate final `gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt` in `preprocessing_v8`
 
 ### Actually run PEER correction and compute residuals
 
-
+echo "running calculate_PEER.sh"
 bash ${scriptdir}/correction/calculate_PEER.sh
 
 # Relies on `preprocessing/correction/calculate_PEER_factors.R` and `preprocessing/correction/calculate_PEER_residuals.R`.

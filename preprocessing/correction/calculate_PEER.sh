@@ -52,9 +52,9 @@ runPeer() {
 
 export -f runPeer
 
-# parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
-for traitsFileName in ${peerdir}/*.log2.ztrans.txt; do
-    runPeer $traitsFileName
-done
+parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
+# for traitsFileName in ${peerdir}/*.log2.ztrans.txt; do
+#     runPeer $traitsFileName
+# done
 
 echo "DONE!"
