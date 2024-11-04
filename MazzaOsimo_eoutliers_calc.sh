@@ -25,19 +25,6 @@ source activate expr_preprocessing_bash_py2_env
 export BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
 ## Results paths
 export TEMPDIR=${BASEDIR}/temp_workdir
-#define variables
-
-export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
-export OUT=${TEMPDIR}/preprocessing_v8/PEER_v8/
-export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
-export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
-export SAMPLE_TISSUES=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
-export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
-export GTEX_PCs=${GTEX_base}/sample_attrib/phg001796.v1.GTEx_v9.genotype-qc.MULTI/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_support_files/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_953Indiv.20_Genotype_PCs.eigenvec.txt
-## restricted data:
-export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_944Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
-
-
 #create folders
 cd ${TEMPDIR}
 mkdir -p data_v8
@@ -46,6 +33,23 @@ mkdir -p figures
 mkdir -p paper_figures
 mkdir -p preprocessing_v8
 mkdir -p preprocessing_v8/PEER_v8
+#define variables
+export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
+export peerdir=${TEMPDIR}/preprocessing_v8/PEER_v8
+export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+export SAMPLE_TISSUES=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
+export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
+export GTEX_PCs=${GTEX_base}/sample_attrib/phg001796.v1.GTEx_v9.genotype-qc.MULTI/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_support_files/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_953Indiv.20_Genotype_PCs.eigenvec.txt
+export scriptdir=${BASEDIR}/preprocessing
+export gtex_eqtl_dir=${GTEX_base}/eqtl/GTEx_Analysis_v8_eQTL
+## restricted data:
+export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_944Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
+
+
+
+
+
 
 
 #create sample tissues file
@@ -58,9 +62,9 @@ head ${SAMPLE_TISSUES}
 
 
 #split expression by tissue
-python2 $BASEDIR/preprocessing/split_expr_by_tissues.py --gtex $GTEX_expr --out $OUT --sample $SAMPLE_TISSUES --end '.reads.txt'
+python2 ${scriptdir}/split_expr_by_tissues.py --gtex $GTEX_expr --out ${peerdir} --sample $SAMPLE_TISSUES --end '.reads.txt'
 
-ls $OUT
+ls ${peerdir} 
 
 
 # Creates one file with read counts and one with tpm per tissue in `preprocessing_v8` folder
@@ -70,7 +74,7 @@ ls $OUT
 conda deactivate
 source activate eoutliers_calc_R_env
 
-Rscript ../preprocessing/MazzaOsimo_preprocess_expr.R
+Rscript ${scriptdir}/MazzaOsimo_preprocess_expr.R
 
 
 ### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles
@@ -78,22 +82,21 @@ Rscript ../preprocessing/MazzaOsimo_preprocess_expr.R
 conda deactivate
 source activate expr_preprocessing_bash_py2_env
 
-bash ../preprocessing/get_eqtl_genotypes.sh
+bash ${scriptdir}/get_eqtl_genotypes.sh
 
 ls $TEMPDIR/preprocessing_v8/
 
 conda deactivate
 source activate eoutliers_calc_R_env
 
-Rscript ../preprocessing/process_gtex_v8_cis_eqtl_genotypes.R
+Rscript ${scriptdir}/process_gtex_v8_cis_eqtl_genotypes.R
 
 # Generates several intermediate files in `preprocessing_v8` and relies on `process_gtex_v8_cis_eqtl_genotypes.R` to generate final `gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt` in `preprocessing_v8`
 
 ### Actually run PEER correction and compute residuals
 
 
-bash ../preprocessing/correction/calculate_PEER.sh
-
+bash ${scriptdir}/correction/calculate_PEER.sh
 
 # Relies on `preprocessing/correction/calculate_PEER_factors.R` and `preprocessing/correction/calculate_PEER_residuals.R`.
 
