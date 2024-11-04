@@ -63,10 +63,10 @@ head ${SAMPLE_TISSUES}
 #split expression by tissue
 echo "running split_expr_by_tissues.py"
 END='.tpm.txt'
-python2 ${scriptdir}/split_expr_by_tissues.py --GTEX $GTEX_expr --OUT $peerdir --SAMPLE $SAMPLE_TISSUES --END $END
+python2 ${scriptdir}/split_expr_by_tissues.py --gtex $GTEX_expr --out $peerdir --sample $SAMPLE_TISSUES --end $END
 
 END='.reads.txt'
-python2 ${scriptdir}/split_expr_by_tissues.py --GTEX $GTEX_expr --OUT $peerdir --SAMPLE $SAMPLE_TISSUES --END $END
+python2 ${scriptdir}/split_expr_by_tissues.py --gtex $GTEX_expr --out $peerdir --sample $SAMPLE_TISSUES --end $END
 
 ls ${peerdir} 
 
