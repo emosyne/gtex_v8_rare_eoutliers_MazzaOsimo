@@ -90,8 +90,6 @@ Rscript ../preprocessing/process_gtex_v8_cis_eqtl_genotypes.R
 
 ### Actually run PEER correction and compute residuals
 
-conda deactivate
-source activate expr_preprocessing_bash_py2_env
 
 bash ../preprocessing/correction/calculate_PEER.sh
 
