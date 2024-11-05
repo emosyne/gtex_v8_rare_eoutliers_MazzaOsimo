@@ -6,7 +6,7 @@ set -o nounset -o errexit -o pipefail
 ## The nubmer of PEER factors is determined by the number of samples in the tissue.
 ## 15 factors for < 150 samples; 30 factors for between 150 and 250 samples; 35 factors for > 250 samples
 
-peerdir=${TEMPDIR}/preprocessing_v8/PEER_v8
+peerdir=${WorkDir}/preprocessing_v8/PEER_v8
 scriptdir=`dirname \$(readlink -f "\$0")`
 gtex_eqtl_dir=${GTEXv8}/eqtl/GTEx_Analysis_v8_eQTL
 
@@ -45,7 +45,7 @@ runPeer() {
     # computing residuals
     Rscript ${scriptdir}/calculate_PEER_residuals.R $traitsFileName ${peerdir}/covariates.txt \
             ${indir}/factors.tsv ${gtex_eqtl_dir}/${tissue}.v8.egenes.txt.gz \
-        $TEMPDIR/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt \
+        $WorkDir/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt \
         ${prefix}.peer.v8ciseQTLs.ztrans.compare.txt &> ${outdir}/log.residuals.txt  
 }
 

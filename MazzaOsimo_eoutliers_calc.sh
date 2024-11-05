@@ -24,9 +24,9 @@ source activate expr_preprocessing_bash_py2_env
 
 export BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo
 ## Results paths
-export TEMPDIR=${BASEDIR}/temp_workdir
+export WorkDir=${BASEDIR}/temp_workdir
 #create folders
-cd ${TEMPDIR}
+cd ${WorkDir}
 mkdir -p data_v8
 mkdir -p features_v8
 mkdir -p figures
@@ -35,10 +35,10 @@ mkdir -p preprocessing_v8
 mkdir -p preprocessing_v8/PEER_v8
 #define variables
 export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
-export peerdir=${TEMPDIR}/preprocessing_v8/PEER_v8
+export peerdir=${WorkDir}/preprocessing_v8/PEER_v8
 export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
 export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
-export SAMPLE_TISSUES=${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
+export SAMPLE_TISSUES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
 export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
 export scriptdir=${BASEDIR}/preprocessing
 export gtex_eqtl_dir=${GTEX_base}/eqtl/GTEx_Analysis_v8_eQTL
@@ -88,7 +88,7 @@ source activate expr_preprocessing_bash_py2_env
 echo "running get_eqtl_genotypes.sh"
 bash ${scriptdir}/get_eqtl_genotypes.sh
 
-ls $TEMPDIR/preprocessing_v8/
+ls $WorkDir/preprocessing_v8/
 
 conda deactivate
 source activate eoutliers_calc_R_env
@@ -106,10 +106,10 @@ bash ${scriptdir}/correction/calculate_PEER.sh
 
 # Creates a file for each tissue  under `preprocessing/PEER_v8/` with scaled and corrected log2(tpm) values.
 
-# ### Combine PEER-corrected data into a single flat file (and compress output file)
+### Combine PEER-corrected data into a single flat file (and compress output file)
 
 # python gather_filter_normalized_expression.py 
-# gzip ${TEMPDIR}/preprocessing_v8/gtex_2017-06-05_normalized_expression.txt
+# gzip ${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression.txt
 
 
 # Creates and compresses `preprocessing_v8/gtex_2017-06-05_normalized_expression.txt.gz`.

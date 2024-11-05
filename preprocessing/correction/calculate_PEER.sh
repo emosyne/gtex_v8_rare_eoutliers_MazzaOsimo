@@ -45,7 +45,7 @@ runPeer() {
     # computing residuals
     Rscript ${scriptdir}/correction/calculate_PEER_residuals.R $traitsFileName ${peerdir}/covariates.txt \
             ${indir}/factors.tsv ${gtex_eqtl_dir}/${tissue}.v8.egenes.txt.gz \
-        $TEMPDIR/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt \
+        $WorkDir/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt \
         ${prefix}.peer.v8ciseQTLs.ztrans.txt &> ${outdir}/log.residuals.txt  
     
 }

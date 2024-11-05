@@ -14,7 +14,7 @@ fi
 gtex=$1
 
 rootname=`basename $gtex | sed 's/.gtf//'`
-gtexprefix=${TEMPDIR}/preprocessing_v8/${rootname}
+gtexprefix=${WorkDir}/preprocessing_v8/${rootname}
 
 # gene bed file
 cat $gtex | awk 'BEGIN{OFS="\t"}{

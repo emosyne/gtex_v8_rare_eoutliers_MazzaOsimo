@@ -3,8 +3,8 @@
 #Run liftover for all dnase files from hg19 to hg38
 #Assumes both hg19tohg38 chain file and liftOver executable have been downloaded
 
-CHAIN=$TEMPDIR/preprocessing_v8/hg19ToHg38.over.chain.gz
-SVDIR=$TEMPDIR/features_v7/variantBeds/individuals
+CHAIN=$WorkDir/preprocessing_v8/hg19ToHg38.over.chain.gz
+SVDIR=$WorkDir/features_v7/variantBeds/individuals
 OUTDIR=${SVDIR}/HallLabSV_hg38/
 for FILE in $(ls ${SVDIR}/*_HallLabSV.bed.gz)
 do

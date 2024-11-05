@@ -40,13 +40,13 @@ ztrans.tissue = function(tissue, dir, covs, read.filt = 6, tpm.filt = 0.1) {
     tpm = tpm[indices.keep, ]
     tpm.out = scale(t(log2(tpm + 2))) 
     colnames(tpm.out) = genes[indices.keep]
-    write.table(tpm.out, paste0(dir, tissue, '.log2.ztrans.txt'), quote = F, sep = '\t', row.names = T, col.names = T)
+    write.table(tpm.out, paste0(dir, '/', tissue, '.log2.ztrans.txt'), quote = F, sep = '\t', row.names = T, col.names = T)
     return()
 }
 
 ##------------- MAIN
 
-dir = Sys.getenv('TEMPDIR')
+dir = Sys.getenv('WorkDir')
 peer.dir = Sys.getenv('peerdir')
 pc.file = Sys.getenv('GTEX_PCs')
 subject.file = Sys.getenv('GTEX_SUBJECTSv8')
