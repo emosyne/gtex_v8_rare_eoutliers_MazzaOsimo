@@ -83,10 +83,8 @@ Rscript ${scriptdir}/MazzaOsimo_preprocess_expr.R
 
 ### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles
 
-conda deactivate
-source activate expr_preprocessing_bash_py2_env
-echo "running get_eqtl_genotypes.sh"
-bash ${scriptdir}/get_eqtl_genotypes.sh
+
+
 
 ls $WorkDir/preprocessing_v8/
 
