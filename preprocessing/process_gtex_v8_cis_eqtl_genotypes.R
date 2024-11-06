@@ -6,9 +6,10 @@ rm(list = ls())
 
 require(ggplot2)
 require(data.table)
+require(plyr)
 require(dplyr)
 require(reshape2)
-require(plyr)
+
 
 baseDir = Sys.getenv('WorkDir')
 dir = paste0(baseDir, '/preprocessing_v8')

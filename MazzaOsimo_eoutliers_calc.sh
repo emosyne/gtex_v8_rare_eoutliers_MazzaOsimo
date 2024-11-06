@@ -1,14 +1,14 @@
 #!/bin/bash 
 
 #SBATCH -J eoutliers_calc_scz_mazzaosimo
-#SBATCH -A MURRAY-SL2-CPU
+#SBATCH -A MURRAY-SL3-CPU
 #SBATCH -p cclake
 #SBATCH --nodes=1
 #! The Cascade Lake (cclake) nodes have 56 CPUs (cores) each and
 #! 3420 MiB of memory per CPU.
 #SBATCH --ntasks=16
 #SBATCH --mem=32G
-#SBATCH --time=6:00:00
+#SBATCH --time=12:00:00
 #SBATCH --mail-user=efo22@cam.ac.uk
 #SBATCH --mail-type=BEGIN,END,FAIL
 
