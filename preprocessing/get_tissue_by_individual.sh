@@ -18,7 +18,7 @@ echo -e "Tissue\tId" > $out
 for f in ${dir}/PEER_v8/*.peer.ztrans.txt
 do
     fname=`basename $f`
-    tissue=${fname%.log2.ztrans.txt}
+    tissue=${fname%.peer.ztrans.txt}
     head -n1 $f | awk -v tissue=$tissue '{for(i=2; i<=NF; i++){print tissue"\t"$i}}' >> $out
     # awk -v tissue=$tissue 'NR > 1 {print tissue"\t"$1}' $f >> $out
 done
