@@ -53,12 +53,36 @@ runPeer() {
 
 export -f runPeer
 
-# parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
+# # parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
 # Process the First 10 Files
-parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | head -n 2)
+parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | head -n 10)
 
-# for traitsFileName in ${peerdir}/*.log2.ztrans.txt; do
-#     runPeer $traitsFileName
+
+
+# # Get the list of files
+# export files=(${peerdir}/*.log2.ztrans.txt)
+
+# # Loop through the files in chunks of 10
+# for ((i=0; i<${#files[@]}; i+=10)); do
+#   sbatch <<EOT
+# #!/bin/bash
+# #SBATCH -J peer_$i
+# #SBATCH -A MURRAY-SL3-CPU
+# #SBATCH -p cclake
+# #SBATCH --nodes=1
+# #SBATCH --ntasks=16
+# #SBATCH --mem=32G
+# #SBATCH --time=12:00:00
+# #SBATCH --mail-user=efo22@cam.ac.uk
+# #SBATCH --mail-type=BEGIN,END,FAIL
+# #SBATCH --output=${BASEDIR}/peer_job_$i.out
+# #SBATCH --error=${BASEDIR}/peer_job_$i.err
+
+# source /home/efo22/miniconda3/etc/profile.d/conda.sh
+# source activate eoutliers_calc_R_env
+
+# parallel --jobs 10 runPeer ::: "${files[@]:i:10}"
+# EOT
 # done
 
 echo "DONE!"

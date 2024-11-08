@@ -8,7 +8,7 @@
 #! 3420 MiB of memory per CPU.
 #SBATCH --ntasks=16
 #SBATCH --mem=32G
-#SBATCH --time=6:00:00
+#SBATCH --time=12:00:00
 #SBATCH --mail-user=efo22@cam.ac.uk
 #SBATCH --mail-type=BEGIN,END,FAIL
 
@@ -60,7 +60,17 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 ### Transforming data prior to PEER correction
 ### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles
 ### Actually run PEER correction and compute residuals
-bash ${BASEDIR}/part1.sh
+# bash ${BASEDIR}/part1.sh
+
+### Actually run PEER correction and compute residuals
+conda deactivate
+source activate eoutliers_calc_R_env
+echo "running calculate_PEER.sh"
+bash ${scriptdir}/correction/calculate_PEER.sh
+
+# Relies on `preprocessing/correction/calculate_PEER_factors.R` and `preprocessing/correction/calculate_PEER_residuals.R`.
+
+# Creates a file for each tissue  under `preprocessing/PEER_v8/` with scaled and corrected log2(tpm) values.
 
 
 # # PART2: 
