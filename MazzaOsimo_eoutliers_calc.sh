@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-#SBATCH -J eoutliers_calc_scz_mazzaosimo
+#SBATCH -J eoutliers_calc_scz_41-50
 #SBATCH -A MURRAY-SL3-CPU
 #SBATCH -p cclake
 #SBATCH --nodes=1
@@ -63,8 +63,7 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 # bash ${BASEDIR}/part1.sh
 
 ### Actually run PEER correction and compute residuals
-conda deactivate
-source activate eoutliers_calc_R_env
+source activate eoutliers_calc_R_env2
 echo "running calculate_PEER.sh"
 bash ${scriptdir}/correction/calculate_PEER.sh
 

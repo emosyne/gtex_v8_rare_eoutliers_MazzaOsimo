@@ -25,7 +25,7 @@ ls ${peerdir}
 ### Transforming data prior to PEER correction
 
 conda deactivate
-source activate eoutliers_calc_R_env
+source activate eoutliers_calc_R_env2
 echo "running MazzaOsimo_preprocess_expr.R"
 Rscript ${scriptdir}/MazzaOsimo_preprocess_expr.R
 
@@ -40,9 +40,11 @@ bash ${scriptdir}/get_eqtl_genotypes.sh
 ls $WorkDir/preprocessing_v8/
 
 conda deactivate
-source activate eoutliers_calc_R_env
+source activate eoutliers_calc_R_env2
 echo "running process_gtex_v8_cis_eqtl_genotypes.R"
 Rscript ${scriptdir}/process_gtex_v8_cis_eqtl_genotypes.R
+
+conda deactivate
 
 # Generates several intermediate files in `preprocessing_v8` and relies on `process_gtex_v8_cis_eqtl_genotypes.R` to generate final `gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed.txt` in `preprocessing_v8`
 

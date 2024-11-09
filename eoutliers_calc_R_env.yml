@@ -1,4 +1,4 @@
-name: eoutliers_calc_R_env
+name: eoutliers_calc_R_env2
 channels:
   - bioconda
   - conda-forge

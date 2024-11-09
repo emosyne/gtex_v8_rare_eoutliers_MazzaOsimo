@@ -55,9 +55,11 @@ export -f runPeer
 
 # # parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
 # Process the First 10 Files
-parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | head -n 10)
-
-
+# parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | head -n 10)
+# parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | tail -n +11 | head -n 10)
+# parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | tail -n +21 | head -n 10)
+# parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | tail -n +31 | head -n 10)
+parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | tail -n +41 | head -n 10)
 
 # # Get the list of files
 # export files=(${peerdir}/*.log2.ztrans.txt)
@@ -79,7 +81,7 @@ parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | head -n 10)
 # #SBATCH --error=${BASEDIR}/peer_job_$i.err
 
 # source /home/efo22/miniconda3/etc/profile.d/conda.sh
-# source activate eoutliers_calc_R_env
+# source activate eoutliers_calc_R_env2
 
 # parallel --jobs 10 runPeer ::: "${files[@]:i:10}"
 # EOT
