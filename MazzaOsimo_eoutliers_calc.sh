@@ -26,10 +26,6 @@ export BASEDIR=/rds/project/rds-qBQA9s264aY/share/eosimo_fmazzarotto/gtex_v8_rar
 export WorkDir=${BASEDIR}/temp_workdir
 #create folders
 cd ${WorkDir}
-mkdir -p data_v8
-mkdir -p features_v8
-mkdir -p figures
-mkdir -p paper_figures
 mkdir -p preprocessing_v8
 mkdir -p preprocessing_v8/PEER_v8
 #define variables
