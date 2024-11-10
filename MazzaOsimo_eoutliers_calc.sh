@@ -7,7 +7,7 @@
 #! The Cascade Lake (cclake) nodes have 56 CPUs (cores) each and
 #! 3420 MiB of memory per CPU.
 #SBATCH --ntasks=32
-#SBATCH --time=6:00:00
+#SBATCH --time=12:00:00
 #SBATCH --mail-user=efo22@cam.ac.uk
 #SBATCH --mail-type=BEGIN,END,FAIL
 
