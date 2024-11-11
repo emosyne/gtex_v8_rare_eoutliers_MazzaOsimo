@@ -44,51 +44,26 @@ runPeer() {
     Rscript ${scriptdir}/correction/calculate_PEER_factors.R $traitsFileName $maxFactorsN $maxIterations \
             $boundTol $varTol $e_pa $e_pb $a_pa $a_pb $outdir $tissue 2>&1 | tee -a ${outdir}/log_calculate_PEER_factors.txt
     
-    # computing residuals
-    echo "computing residuals Rscript ${scriptdir}/correction/calculate_PEER_residuals.R ${traitsFileName} ${peerdir}/covariates.txt \
-            ${indir}/factors.tsv ${gtex_eqtl_dir}/${tissue}.v8.egenes.txt.gz \
-            ${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed_withdups.txt \
-            ${tissue}.peer.v8ciseQTLs.ztrans.txt"
-    Rscript ${scriptdir}/correction/calculate_PEER_residuals.R ${traitsFileName} ${peerdir}/covariates.txt \
-            ${indir}/factors.tsv ${gtex_eqtl_dir}/${tissue}.v8.egenes.txt.gz \
-            ${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed_withdups.txt \
-            ${tissue}.peer.v8ciseQTLs.ztrans.txt | tee -a ${outdir}/log_calculate_PEER_residuals.txt  
+    # # computing residuals
+    # echo "computing residuals Rscript ${scriptdir}/correction/calculate_PEER_residuals.R ${traitsFileName} ${peerdir}/covariates.txt \
+    #         ${indir}/factors.tsv ${gtex_eqtl_dir}/${tissue}.v8.egenes.txt.gz \
+    #         ${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed_withdups.txt \
+    #         ${tissue}.peer.v8ciseQTLs.ztrans.txt"
+    # Rscript ${scriptdir}/correction/calculate_PEER_residuals.R ${traitsFileName} ${peerdir}/covariates.txt \
+    #         ${indir}/factors.tsv ${gtex_eqtl_dir}/${tissue}.v8.egenes.txt.gz \
+    #         ${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed_withdups.txt \
+    #         ${tissue}.peer.v8ciseQTLs.ztrans.txt 2>&1 | tee -a ${tissue}_log_calculate_PEER_residuals.txt  
 }
 
 export -f runPeer
 
-# # parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
+parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
 # Process the First 10 Files
-parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | head -n 10)
+# parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | head -n 10)
 # parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | tail -n +11 | head -n 10)
 # parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | tail -n +21 | head -n 10)
 # parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | tail -n +31 | head -n 10)
 # parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | tail -n +41 | head -n 10)
 
-# # Get the list of files
-# export files=(${peerdir}/*.log2.ztrans.txt)
-
-# # Loop through the files in chunks of 10
-# for ((i=0; i<${#files[@]}; i+=10)); do
-#   sbatch <<EOT
-# #!/bin/bash
-# #SBATCH -J peer_$i
-# #SBATCH -A MURRAY-SL3-CPU
-# #SBATCH -p cclake
-# #SBATCH --nodes=1
-# #SBATCH --ntasks=16
-# #SBATCH --mem=32G
-# #SBATCH --time=12:00:00
-# #SBATCH --mail-user=efo22@cam.ac.uk
-# #SBATCH --mail-type=BEGIN,END,FAIL
-# #SBATCH --output=${BASEDIR}/peer_job_$i.out
-# #SBATCH --error=${BASEDIR}/peer_job_$i.err
-
-# source /home/efo22/miniconda3/etc/profile.d/conda.sh
-# source activate eoutliers_calc_R_env2
-
-# parallel --jobs 10 runPeer ::: "${files[@]:i:10}"
-# EOT
-# done
 
 echo "DONE!"
