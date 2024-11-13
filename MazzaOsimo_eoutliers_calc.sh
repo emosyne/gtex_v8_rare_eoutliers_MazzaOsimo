@@ -1,6 +1,7 @@
 #!/bin/bash 
 
-#SBATCH -J eoutliers_calc
+#SBATCH -J eoutliers_calc_residual_calculate_PEER_factors_files
+#SBATCH --output=slurm_%j.out
 #SBATCH -A MURRAY-SL2-CPU
 #SBATCH -p cclake
 #SBATCH --nodes=1
@@ -58,13 +59,16 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 # bash ${BASEDIR}/part1.sh
 
 ### Actually run PEER correction and compute residuals
-source activate eoutliers_calc_R_env2
-echo "running calculate_PEER.sh"
-bash ${scriptdir}/correction/calculate_PEER.sh
-
-# Relies on `preprocessing/correction/calculate_PEER_factors.R` and `preprocessing/correction/calculate_PEER_residuals.R`.
-
 # Creates a file for each tissue  under `preprocessing/PEER_v8/` with scaled and corrected log2(tpm) values.
+
+source activate eoutliers_calc_R_env2
+echo "calculating peer factors"
+bash ${scriptdir}/correction/1_calculate_PEER_factors.sh
+# Relies on `preprocessing/correction/calculate_PEER_factors.R` 
+echo "calculating peer residuals"
+bash ${scriptdir}/correction/2_calculate_PEER_residuals.sh
+# Relies on `preprocessing/correction/calculate_PEER_residuals.R`.
+
 
 
 # # PART2: 
