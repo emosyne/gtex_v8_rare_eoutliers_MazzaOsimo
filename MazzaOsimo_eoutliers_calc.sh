@@ -1,16 +1,14 @@
-#!/bin/bash 
-
-#SBATCH -J eoutliers_calc_residual_calculate_PEER_factors_files
-#SBATCH --output=slurm_%j.out
+#!/bin/bash
+#SBATCH --job-name=eoutliers_calculate_PEER_factors_long
+#SBATCH --output=slurm_%x_%j.out
 #SBATCH -A MURRAY-SL2-CPU
-#SBATCH -p cclake
+#SBATCH -p cclake-long
 #SBATCH --nodes=1
-#! The Cascade Lake (cclake) nodes have 56 CPUs (cores) each and
-#! 3420 MiB of memory per CPU.
-#SBATCH --ntasks=32
-#SBATCH --time=36:00:00
+#SBATCH --ntasks=16
+#SBATCH --time=120:00:00
 #SBATCH --mail-user=efo22@cam.ac.uk
 #SBATCH --mail-type=BEGIN,END,FAIL
+
 
 #! sbatch directives end here (put any additional directives above this line)
 
@@ -63,11 +61,13 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 
 source activate eoutliers_calc_R_env2
 echo "calculating peer factors"
+# this script takes more than 36 hours running in parallel 10 files at a time on 32 nodes:
 bash ${scriptdir}/correction/1_calculate_PEER_factors.sh
 # Relies on `preprocessing/correction/calculate_PEER_factors.R` 
-echo "calculating peer residuals"
-bash ${scriptdir}/correction/2_calculate_PEER_residuals.sh
-# Relies on `preprocessing/correction/calculate_PEER_residuals.R`.
+
+# echo "calculating peer residuals"
+# bash ${scriptdir}/correction/2_calculate_PEER_residuals.sh
+# # Relies on `preprocessing/correction/calculate_PEER_residuals.R`.
 
 
 

@@ -58,7 +58,6 @@ export -f runPeer
 
 
 # parallel --jobs 10 runPeer ::: ${peerdir}/*.log2.ztrans.txt
-parallel --jobs 10 runPeer ::: temp_workdir/preprocessing_v8/PEER_v8/Whole_Blood.log2.ztrans.txt temp_workdir/preprocessing_v8/PEER_v8/Testis.log2.ztrans.txt temp_workdir/preprocessing_v8/PEER_v8/Thyroid.log2.ztrans.txt temp_workdir/preprocessing_v8/PEER_v8/Stomach.log2.ztrans.txt temp_workdir/preprocessing_v8/PEER_v8/Pituitary.log2.ztrans.txt temp_workdir/preprocessing_v8/PEER_v8/Heart_Atrial_Appendage.log2.ztrans.txt temp_workdir/preprocessing_v8/PEER_v8/Heart_Left_Ventricle.log2.ztrans.txt
 
 # Process the First 10 Files
 # parallel --jobs 10 runPeer ::: $(ls ${peerdir}/*.log2.ztrans.txt | head -n 10)
