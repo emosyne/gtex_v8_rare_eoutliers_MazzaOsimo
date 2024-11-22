@@ -5,6 +5,7 @@ rm(list = ls())
 require(data.table)
 require(plyr)
 require(dplyr)
+library(tibble)
 
 
 #-------------- MAIN
@@ -22,6 +23,12 @@ peer_file = args[3]
 eqtl_call_file = args[4]
 eqtl_geno_file = args[5]
 out_file = args[6]
+# expr_file = Sys.getenv("traitsFileName")
+# covs_file = paste0(Sys.getenv("peerdir"),"/covariates.txt")
+# peer_file = paste0(Sys.getenv("indir"),"/factors.tsv")
+# eqtl_call_file = paste0(Sys.getenv("gtex_eqtl_dir"),"/",Sys.getenv("tissue"),".v8.egenes.txt.gz")
+# eqtl_geno_file = paste0(Sys.getenv("WorkDir"),"/preprocessing_v8/gtex_2017-06-05_v8_genotypes_cis_eQTLs_012_processed_withdups.txt")
+# out_file = paste0(Sys.getenv("indir"),"/",Sys.getenv("tissue"),".peer.v8ciseQTLs.ztrans.txt")
 
 ## Read in expression and covariate matrices
 expr = read.table(expr_file, header = T, sep = '\t', row.names = 1)
@@ -41,7 +48,7 @@ peer = peer[rownames(expr), ]
 ## Combine covariates and PEER factors
 #num_keep = round(0.5*ncol(peer))
 #peer = peer[,1:num_keep]
-covs = cbind(covs, peer)
+covs = inner_join(rownames_to_column(covs, var = "id"), rownames_to_column(as.data.frame(peer), var = "id")) %>% column_to_rownames(var = "id")
 
 ## Remove individuals with missing covariates
 inds_to_keep = rowSums(is.na(covs)) == 0
@@ -54,7 +61,11 @@ eqtl_calls = read.table(eqtl_call_file, sep = '\t', header = T) %>% select(Gene 
 eqtl_calls = eqtl_calls %>% filter(Qval <= 0.05) # testing effect of restricting to sig eQTLs
 eqtl_genos = as.data.frame(fread(eqtl_geno_file))
 
-eqtl_genos = eqtl_genos %>% select(c('Chrom', 'Pos', rownames(expr))) %>%
+# Get the row names from expr that are also column names in eqtl_genos
+common_columns <- rownames(expr)[rownames(expr) %in% names(eqtl_genos)]
+
+# Select the columns from eqtl_genos
+eqtl_genos = eqtl_genos %>% select(c('Chrom', 'Pos', common_columns)) %>%
 			merge(., eqtl_calls)
 
 ## For each gene in the expression file, perform a linear regression 

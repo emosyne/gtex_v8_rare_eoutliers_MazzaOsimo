@@ -15,10 +15,10 @@ inds=${dir}/gtex_individuals_all_normalized_samples.txt
 # put header
 echo -e "Tissue\tId" > $out
 
-for f in ${dir}/PEER_v8/*.peer.ztrans.txt
+for f in ${dir}/PEER_v8/*.peer.v8ciseQTLs.ztrans.txt
 do
     fname=`basename $f`
-    tissue=${fname%.peer.ztrans.txt}
+    tissue=${fname%.peer.v8ciseQTLs.ztrans.txt}
     head -n1 $f | awk -v tissue=$tissue '{for(i=2; i<=NF; i++){print tissue"\t"$i}}' >> $out
     # awk -v tissue=$tissue 'NR > 1 {print tissue"\t"$1}' $f >> $out
 done
