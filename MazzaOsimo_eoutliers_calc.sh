@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=eoutliers_calculate_PEER_factors_long
+#SBATCH --job-name=eoutliers_calculate_PEER_residuals
 #SBATCH --output=slurm_%x_%j.out
-#SBATCH -A MURRAY-SL2-CPU
-#SBATCH -p cclake-long
+#SBATCH -A MURRAY-SL3-CPU
+#SBATCH -p cclake
 #SBATCH --nodes=1
 #SBATCH --ntasks=16
-#SBATCH --time=120:00:00
+#SBATCH --time=6:00:00
 #SBATCH --mail-user=efo22@cam.ac.uk
 #SBATCH --mail-type=BEGIN,END,FAIL
 
@@ -60,14 +60,14 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 # Creates a file for each tissue  under `preprocessing/PEER_v8/` with scaled and corrected log2(tpm) values.
 
 source activate eoutliers_calc_R_env2
-echo "calculating peer factors"
-# this script takes more than 36 hours running in parallel 10 files at a time on 32 nodes:
-bash ${scriptdir}/correction/1_calculate_PEER_factors.sh
-# Relies on `preprocessing/correction/calculate_PEER_factors.R` 
+# echo "calculating peer factors"
+# # this script takes more than 36 hours running in parallel 10 files at a time on 32 nodes:
+# bash ${scriptdir}/correction/1_calculate_PEER_factors.sh
+# # Relies on `preprocessing/correction/calculate_PEER_factors.R` 
 
-# echo "calculating peer residuals"
-# bash ${scriptdir}/correction/2_calculate_PEER_residuals.sh
-# # Relies on `preprocessing/correction/calculate_PEER_residuals.R`.
+echo "calculating peer residuals"
+bash ${scriptdir}/correction/2_calculate_PEER_residuals.sh
+# Relies on `preprocessing/correction/calculate_PEER_residuals.R`.
 
 
 
