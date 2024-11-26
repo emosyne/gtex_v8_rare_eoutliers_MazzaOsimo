@@ -16,7 +16,7 @@ if (length(args) != 6) {
   quit(status = 2)
 }
 
-## Define arguments
+# Define arguments
 expr_file = args[1]
 covs_file = args[2]
 peer_file = args[3]
@@ -61,11 +61,12 @@ eqtl_calls = read.table(eqtl_call_file, sep = '\t', header = T) %>% select(Gene 
 eqtl_calls = eqtl_calls %>% filter(Qval <= 0.05) # testing effect of restricting to sig eQTLs
 eqtl_genos = as.data.frame(fread(eqtl_geno_file))
 
-# Get the row names from expr that are also column names in eqtl_genos
-common_columns <- rownames(expr)[rownames(expr) %in% names(eqtl_genos)]
+# Nov 24 : remove individuals from expr and covs that are not in eqtl_genos
+expr <- expr[rownames(expr) %in% names(eqtl_genos), ]
+covs <- covs[rownames(covs) %in% names(eqtl_genos), ]
 
 # Select the columns from eqtl_genos
-eqtl_genos = eqtl_genos %>% select(c('Chrom', 'Pos', common_columns)) %>%
+eqtl_genos = eqtl_genos %>% select(c('Chrom', 'Pos', rownames(expr))) %>%
 			merge(., eqtl_calls)
 
 ## For each gene in the expression file, perform a linear regression 
