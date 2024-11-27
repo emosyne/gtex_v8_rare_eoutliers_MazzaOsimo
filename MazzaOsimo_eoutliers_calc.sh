@@ -102,28 +102,28 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 ### Actually run PEER correction and compute residuals
 # Creates a file for each tissue  under `preprocessing/PEER_v8/` with scaled and corrected log2(tpm) values.
 
-source activate eoutliers_calc_R_env2
+# source activate eoutliers_calc_R_env2
 # echo "calculating peer factors"
 # # this script takes more than 36 hours running in parallel 10 files at a time on 32 nodes:
 # bash ${scriptdir}/correction/1_calculate_PEER_factors.sh
 # # Relies on `preprocessing/correction/calculate_PEER_factors.R` 
 
-echo "calculating peer residuals"
-bash ${scriptdir}/correction/2_calculate_PEER_residuals.sh
-# Relies on `preprocessing/correction/calculate_PEER_residuals.R`.
+# echo "calculating peer residuals"
+# bash ${scriptdir}/correction/2_calculate_PEER_residuals.sh
+# # Relies on `preprocessing/correction/calculate_PEER_residuals.R`.
 
 
 
-# # PART2: 
 # # ### Generate files with data on what tissues are available per individual
-
+# 
 # bash ${scriptdir}/get_tissue_by_individual.sh
-
 # # Generates `preprocessing_v8/gtex_tissues_all_normalized_samples.txt` and `preprocessing_v8/gtex_individuals_all_normalized_samples.txt`
 
-# ### Combine PEER-corrected data into a single flat file (and compress output file)
-# python2 ${scriptdir}/gather_filter_normalized_expression.py 
-# gzip ${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt
+### Combine PEER-corrected data into a single flat file (and compress output file)
+conda deactivate
+source activate expr_preprocessing_bash_py2_env
+python2 ${scriptdir}/gather_filter_normalized_expression.py 
+gzip ${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt
 
 
 # # Creates and compresses `preprocessing_v8/gtex_normalized_expression.txt.gz`.
