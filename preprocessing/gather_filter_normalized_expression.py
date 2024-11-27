@@ -41,8 +41,7 @@ out.write('\t'.join(['Tissue','Gene'] + individuals) + '\n')
 
 # process tissues one at a time 
 for tissue in tissues:
-    # filename = exprdir + tissue + '.log2.ztrans.txt'
-    filename = exprdir + 'Adipose_Subcutaneous' + '.peer.v8ciseQTLs.ztrans.txt'
+    filename = exprdir + tissue + '.log2.ztrans.txt'
     # read in header and figure out which columns to keep
     try:
         expr = open(filename, 'r')
