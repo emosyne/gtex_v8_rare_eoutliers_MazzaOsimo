@@ -50,12 +50,12 @@ plot.tissue.miss <- function(design, title = '', thresh = NULL) {
 ##---------------- MAIN
 
 ## Read in official GTEx colors file
-gtex.color.map = read.table('../gtex_tissue_colors.txt', sep = '\t', header = T, stringsAsFactors = F)
+gtex.color.map = read.table(paste0(Sys.getenv('BASEDIR'),'/figures/gtex_tissue_colors.txt'), sep = '\t', header = T, stringsAsFactors = F)
 gtex.colors = paste0('#', gtex.color.map$tissue_color_hex)
 names(gtex.colors) = gtex.color.map$tissue_site_detail_id
 
 ## Read in list of EA samples
-eas.wgs = scan(paste0(dir, '/gtex_2017-06-05_v8_euro_VCFids.txt'), what = character())
+eas.wgs = scan("/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx/sample_attrib/gtex_v10_whiteRace_ids.txt", what = character())
 
 ## Read in sample to tissue correspondence and turn it into a individual to tissue correspondence
 meta = read.table(paste0(dir, '/gtex_2017-06-05_v8_samples_tissues.txt'), header = F,
