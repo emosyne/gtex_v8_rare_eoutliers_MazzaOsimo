@@ -5,7 +5,7 @@
 ## Subsequent columns have Z-score data for each individual and the individual ID is the column name.
 
 ## Get path to the GOATs data directories
-dir = Sys.getenv('RAREDIR')
+# dir = Sys.getenv('RAREDIR')
 
 ## Load required packages
 require(data.table)
@@ -75,7 +75,7 @@ globalFile = opt$GLOBAL
 ##-- Analysis
 
 ## Read in the normalized data
-data = as.data.frame(fread(paste0('zcat ', opt$Z.SCORES)))
+data = as.data.frame(fread(opt$Z.SCORES))
 
 
 ##-- Call outliers using median Z-score
@@ -89,5 +89,5 @@ if (!is.na(globalFile)) {
 
 ## Median Z-score
 print('MEDZ')
-outliers.medz = call.outliers(data, nphen, zthresh,metric = 'medz')
+outliers.medz = call.outliers(data, nphen, zthresh)
 write.outliers(outliers.medz, paste0(dir, prefix, '.medz.txt'))

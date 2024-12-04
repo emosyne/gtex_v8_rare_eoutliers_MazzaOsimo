@@ -35,7 +35,6 @@ export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1
 export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
 export SAMPLE_TISSUES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
 export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
-export scriptdir=${BASEDIR}/preprocessing
 export gtex_eqtl_dir=${GTEX_base}/eqtl
 ## restricted data:
 export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_944Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
@@ -66,10 +65,10 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 # #split expression by tissue
 # echo "running split_expr_by_tissues.py"
 # END='.tpm.txt'
-# python2 ${scriptdir}/split_expr_by_tissues.py --gtex $GTEX_expr --out $peerdir --sample $SAMPLE_TISSUES --end $END
+# python2 ${BASEDIR}/preprocessing/split_expr_by_tissues.py --gtex $GTEX_expr --out $peerdir --sample $SAMPLE_TISSUES --end $END
 
 # END='.reads.txt'
-# python2 ${scriptdir}/split_expr_by_tissues.py --gtex $GTEX_expr --out $peerdir --sample $SAMPLE_TISSUES --end $END
+# python2 ${BASEDIR}/preprocessing/split_expr_by_tissues.py --gtex $GTEX_expr --out $peerdir --sample $SAMPLE_TISSUES --end $END
 
 # ls ${peerdir} 
 
@@ -81,7 +80,7 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 # conda deactivate
 # source activate eoutliers_calc_R_env2
 # echo "running MazzaOsimo_preprocess_expr.R"
-# Rscript ${scriptdir}/MazzaOsimo_preprocess_expr.R
+# Rscript ${BASEDIR}/preprocessing/MazzaOsimo_preprocess_expr.R
 
 
 # ### Generate list of top eQTLs for each gene in each tissue, extract from VCF, convert to number alternative alleles
@@ -89,14 +88,14 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 # conda deactivate
 # source activate expr_preprocessing_bash_py2_env
 # echo "running get_eqtl_genotypes.sh"
-# bash ${scriptdir}/get_eqtl_genotypes.sh
+# bash ${BASEDIR}/preprocessing/get_eqtl_genotypes.sh
 
 # ls $WorkDir/preprocessing_v8/
 
 # conda deactivate
 # source activate eoutliers_calc_R_env2
 # echo "running process_gtex_v8_cis_eqtl_genotypes.R"
-# Rscript ${scriptdir}/process_gtex_v8_cis_eqtl_genotypes.R
+# Rscript ${BASEDIR}/preprocessing/process_gtex_v8_cis_eqtl_genotypes.R
 
 # conda deactivate
 
@@ -110,25 +109,25 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 # source activate eoutliers_calc_R_env2
 # echo "calculating peer factors"
 # # this script takes more than 36 hours running in parallel 10 files at a time on 32 nodes:
-# bash ${scriptdir}/correction/1_calculate_PEER_factors.sh
+# bash ${BASEDIR}/preprocessing/correction/1_calculate_PEER_factors.sh
 # # Relies on `preprocessing/correction/calculate_PEER_factors.R` 
 
 # echo "calculating peer residuals"
-# bash ${scriptdir}/correction/2_calculate_PEER_residuals.sh
+# bash ${BASEDIR}/preprocessing/correction/2_calculate_PEER_residuals.sh
 # # Relies on `preprocessing/correction/calculate_PEER_residuals.R`.
 
 
 
 # # ### Generate files with data on what tissues are available per individual
 # 
-# bash ${scriptdir}/get_tissue_by_individual.sh
+# bash ${BASEDIR}/preprocessing/get_tissue_by_individual.sh
 # # Generates `preprocessing_v8/gtex_tissues_all_normalized_samples.txt` and `preprocessing_v8/gtex_individuals_all_normalized_samples.txt`
 
 
 # ### Combine PEER-corrected data into a single flat file (and compress output file)
 # conda deactivate
 # source activate expr_preprocessing_bash_py2_env
-# python2 ${scriptdir}/gather_filter_normalized_expression.py 
+# python2 ${BASEDIR}/preprocessing/gather_filter_normalized_expression.py 
 # gzip ${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt
 # # Creates and compresses `preprocessing_v8/gtex_normalized_expression.txt.gz`.
 
@@ -144,11 +143,11 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 ### Run outlier calling
 conda deactivate
 source activate eoutliers_calc_R_env2
-Rscript outlier_calling/call_outliers.R \
-        --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt.gz \
-        --GLOBAL=${datadir}gtexV8_global_outliers_medz3_iqr.txt \
-        --OUT.PREFIX=/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed \
+Rscript ${BASEDIR}/outlier_calling/call_outliers.R \
+        --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt \
+        --OUT.PREFIX=${WorkDir}/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed \
         --N.PHEN=5 
+        
 
 # Generates one file in specified directory with columns gene ind N Df MedZ Y, where N refers to the number of individuals tested for a given gene, 
 # Df refers to the number of measurements available for that gene in that individual and Y indicates outlier or control. 
@@ -161,19 +160,20 @@ Rscript outlier_calling/call_outliers.R \
 ### Identify global outlier individuals 
 
 Rscript outlier_calling/identify_global_outliers.R \
-        --OUTLIERS=$RAREDIR/data_v8/outliers/gtexV8.outlier.control.medz.txt \
+        # OULIERS: path to the Z-score data: 
+        --OUTLIERS=${WorkDir}/data_v8/outliers/gtexV8.outlier.control.medz.txt \
         --METHOD=proportion
 
-Removes global outlier individuals, either defined based on the proportion of genes called as outliers per individual relative to the population or the number of genes called as outliers, determined by setting 'proportion' or 'number' in `METHOD`. Writes out a new outlier file with `_globalOutliersRemoved` appended to the specified outlier txt file.
+# Removes global outlier individuals, either defined based on the proportion of genes called as outliers per individual relative to the population or the number of genes called as outliers, determined by setting 'proportion' or 'number' in `METHOD`. Writes out a new outlier file with `_globalOutliersRemoved` appended to the specified outlier txt file.
 
 ### From the multi-tissue outliers, determine which tissues have extreme effects and outlier sharing across tissues
 
 Rscript outlier_calling/extract_extreme_tissues.R \
-    --Z.SCORES=$RAREDIR/preprocessing_v8/gtex_2017-06-05_normalized_expression.txt.gz \
-    --EXP.DATA=$RAREDIR//preprocessing_v8/gtex_2017-06-05_normalized_expression_v8ciseQTLs_removed.txt.gz \
+    --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression.txt.gz \
+    --EXP.DATA=${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression_v8ciseQTLs_removed.txt.gz \
 
 
-Generates figures in `figures/GTEXv8_pair_jaccard.pdf`.
+# Generates figures in `figures/GTEXv8_pair_jaccard.pdf`.
 
 
 # ### Select tissues and individuals for downstream analyses (still from correction.md)
