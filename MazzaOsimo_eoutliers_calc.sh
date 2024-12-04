@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=gather_filter_normalized_expression
+#SBATCH --job-name=call_outliers
 #SBATCH --output=slurm_%x_%j.out
 #SBATCH -A MURRAY-SL3-CPU
 #SBATCH -p cclake
@@ -145,35 +145,36 @@ conda deactivate
 source activate eoutliers_calc_R_env2
 Rscript ${BASEDIR}/outlier_calling/call_outliers.R \
         --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt \
-        --OUT.PREFIX=${WorkDir}/data_v8/outliers/gtexV8.outlier.controls.v8ciseQTLs.globalOutliers.removed \
+        --OUT.PREFIX=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs \
         --N.PHEN=5 
-        
 
-# Generates one file in specified directory with columns gene ind N Df MedZ Y, where N refers to the number of individuals tested for a given gene, 
-# Df refers to the number of measurements available for that gene in that individual and Y indicates outlier or control. 
-# The `N.PHEN` argument specifies the minimum number of measurements (i.e. tissues) available for a gene-individual required for inclusion. 
-# We use 5. `GLOBAL` specifies a file with a list of individual IDs to remove as global outliers. If NA, no individuals are removed.
-
-
+# Generates one file (${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt) 
+# with columns gene ind N Df MedZ Y, where N refers to the number of individuals tested for a given gene, Df refers to the number of measurements 
+# for that gene in that individual and Y indicates outlier or control. 
+# The `N.PHEN` argument specifies the minimum number of measurements (i.e. tissues) available for a gene-individual required for inclusion. We use 5. 
+# `GLOBAL` specifies a file with a list of individual IDs to remove as global outliers. If NA, no individuals are removed.
 
 
-### Identify global outlier individuals 
-
-Rscript outlier_calling/identify_global_outliers.R \
-        # OULIERS: path to the Z-score data: 
-        --OUTLIERS=${WorkDir}/data_v8/outliers/gtexV8.outlier.control.medz.txt \
-        --METHOD=proportion
-
-# Removes global outlier individuals, either defined based on the proportion of genes called as outliers per individual relative to the population or the number of genes called as outliers, determined by setting 'proportion' or 'number' in `METHOD`. Writes out a new outlier file with `_globalOutliersRemoved` appended to the specified outlier txt file.
-
-### From the multi-tissue outliers, determine which tissues have extreme effects and outlier sharing across tissues
-
-Rscript outlier_calling/extract_extreme_tissues.R \
-    --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression.txt.gz \
-    --EXP.DATA=${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression_v8ciseQTLs_removed.txt.gz \
 
 
-# Generates figures in `figures/GTEXv8_pair_jaccard.pdf`.
+# ### Identify global outlier individuals 
+# # OULIERS: path to the Z-score data: 
+# Rscript outlier_calling/identify_global_outliers.R \
+#         --OUTLIERS=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt \
+#         --METHOD=proportion
+
+# # Removes global outlier individuals, either defined based on the proportion of genes called as outliers per individual relative to the population or 
+# the number of genes called as outliers, determined by setting 'proportion' or 'number' in `METHOD`. 
+# Writes out a new outlier file with `_globalOutliersRemoved` appended to the specified outlier txt file.
+
+# ### From the multi-tissue outliers, determine which tissues have extreme effects and outlier sharing across tissues
+
+# Rscript outlier_calling/extract_extreme_tissues.R \
+#     --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression.txt.gz \
+#     --EXP.DATA=${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression_v8ciseQTLs_removed.txt.gz \
+
+
+# # Generates figures in `figures/GTEXv8_pair_jaccard.pdf`.
 
 
 # ### Select tissues and individuals for downstream analyses (still from correction.md)
