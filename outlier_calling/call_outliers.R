@@ -90,4 +90,4 @@ if (!is.na(globalFile)) {
 ## Median Z-score
 print('MEDZ')
 outliers.medz = call.outliers(data, nphen, zthresh)
-write.outliers(outliers.medz, paste0(dir, prefix, '.medz.txt'))
+write.outliers(outliers.medz, paste0(prefix, '.medz.txt'))
