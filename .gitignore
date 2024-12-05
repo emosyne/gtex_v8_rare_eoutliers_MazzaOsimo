@@ -1,3 +1,7 @@
 temp_workdir/*
 machine.file*
 slurm*
+figures/*.jpg
+figures/*.jpeg
+figures/*.pdf
+figures/*.gif

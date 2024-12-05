@@ -5,8 +5,9 @@ library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
 library(optparse)
+library(R.utils)
 
-dir = Sys.getenv('GOATSDIR')
+# dir = Sys.getenv('BASEDIR')
 
 option_list = list(make_option(c('--OUTLIERS'), type = 'character', default = NULL, help = 'path to the Z-score data'),
                    make_option(c('--METHOD'), type = 'character', default = 'proportion', help = 'indicate whether to determine global outlier threshold based on proportion of outliers per person or number, options = [proportion, number]'))
@@ -39,6 +40,20 @@ if (global_method == 'proportion') {
   qthres = q3 + 1.5*(q3-q1)
   indsRemove = unique(filter(medzCount, Freq.x > qthres)$Var1)
 }
+
+#write list of global outliers
+fwrite(data.frame(indsRemove), "/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/data_v8/outliers/globalOutliers.txt")
+
+# generate gtex_normalized_expression_global_outliers_removed
+fread("/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/preprocessing_v8/gtex_normalized_expression.txt") %>%
+  select(-one_of(as.character(indsRemove))) %>% 
+  fwrite("/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt",
+        sep = "\t")
+# Compress the file using gzip
+gzip("/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt",
+     destname = "/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt.gz",
+     remove = TRUE,
+     overwrite = TRUE)
 
 medz_data = filter(medz_data, !(Ind %in% indsRemove))
 

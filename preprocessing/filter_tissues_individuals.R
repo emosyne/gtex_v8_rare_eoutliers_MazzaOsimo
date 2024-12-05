@@ -64,7 +64,7 @@ meta$Id = apply(str_split_fixed(meta$Sample, '-', 6)[, c(1:2)], 1, paste, collap
 
 ## Read in normalized expression data and subset above correspondance to individuals with corrected data
 ## (this is a subset because it only includes individuals that were genotyped)
-expr = read.table(gzfile(paste0(dir,'/gtex_2017-06-05_normalized_expression_v8ciseQTLs_removed.txt.gz')), header=T)
+expr = readr::read_tsv("/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt.gz")
 colnames(expr) = gsub("[.]", "-", colnames(expr))
 meta = meta[meta$Id %in% colnames(expr), ]
 

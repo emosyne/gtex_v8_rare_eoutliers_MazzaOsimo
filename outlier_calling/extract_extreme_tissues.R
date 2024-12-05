@@ -8,11 +8,15 @@ library(optparse)
 library(ggplot2)
 library(dplyr)
 library(viridis)
+library(RColorBrewer)
+library(R.utils)
 
-dir = Sys.getenv('RAREDIR')
+dir = Sys.getenv('BASEDIR')
 
 
-source('../paper_figures/plot_settings.R')
+# source('../paper_figures/plot_settings.R')
+meth.colors = brewer.pal(9, 'YlGnBu')[3:9]
+names(meth.colors) = c('EM','KNN','MEAN','PMD','SOFT','STFZ','MEDZ')
 
 ##################### FUNCTIONS
 
@@ -101,7 +105,10 @@ opt_parser = OptionParser(option_list = option_list)
 opt = parse_args(opt_parser)
 
 zscore_file = opt$Z.SCORES
+# zscore_file = "/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt"
 exp_file = opt$EXP.DATA
+# exp_file = "/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz_globalOutliersRemoved.txt"
+# exp_file = "/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/preprocessing_v8/gtex_normalized_expression.txt"
 
 ## Get outliers from top outlier/control data frames and combine into a single data frame
 medz_outliers = fread(zscore_file) %>% mutate(Method = 'MEDZ')
@@ -109,7 +116,7 @@ outlier_list_top = list(medz_outliers)
 outliers.top = do.call(rbind, lapply(outlier_list_top, function(df) df[df$Y == 'outlier', c('Ind','Gene','Method')]))
 
 ## Load expression data
-expr = fread(paste0('zcat ', exp_file))
+expr = readr::read_tsv(exp_file)
 setkey(expr, Gene)
 
 outliers.top$Tissues = apply(outliers.top, 1, get.extreme)
@@ -122,7 +129,7 @@ outliers.specific = filter(outliers.top, Nextreme <= 3) %>%
 plot.spec = ggplot(outliers.specific, aes(x = Nextreme, fill = Method)) +
     geom_bar(position = position_dodge(width = 0.9)) +
     xlab('Number of tissues with |Z-score| > 3') +
-    scale_fill_manual(values = meth.colors) + mytheme
+    scale_fill_manual(values = meth.colors) + theme_classic()
 
 ## Reorganize data for hierarchical clustering then run clustering
 genes = unique(expr[, Gene])

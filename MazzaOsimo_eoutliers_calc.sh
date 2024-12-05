@@ -143,42 +143,46 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 ### Run outlier calling
 conda deactivate
 source activate eoutliers_calc_R_env2
-Rscript ${BASEDIR}/outlier_calling/call_outliers.R \
-        --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt \
-        --OUT.PREFIX=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs \
-        --N.PHEN=5 
+# Rscript ${BASEDIR}/outlier_calling/call_outliers.R \
+#         --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt \
+#         --OUT.PREFIX=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs \
+#         --N.PHEN=5 
 
-# Generates one file (${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt) 
-# with columns gene ind N Df MedZ Y, where N refers to the number of individuals tested for a given gene, Df refers to the number of measurements 
-# for that gene in that individual and Y indicates outlier or control. 
-# The `N.PHEN` argument specifies the minimum number of measurements (i.e. tissues) available for a gene-individual required for inclusion. We use 5. 
-# `GLOBAL` specifies a file with a list of individual IDs to remove as global outliers. If NA, no individuals are removed.
-
-
+# # Generates one file (${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt) 
+# # with columns gene ind N Df MedZ Y, where N refers to the number of individuals tested for a given gene, Df refers to the number of measurements 
+# # for that gene in that individual and Y indicates outlier or control. 
+# # The `N.PHEN` argument specifies the minimum number of measurements (i.e. tissues) available for a gene-individual required for inclusion. We use 5. 
+# # `GLOBAL` specifies a file with a list of individual IDs to remove as global outliers. If NA, no individuals are removed.
 
 
-# ### Identify global outlier individuals 
+
+
+### Identify global outlier individuals 
 # # OULIERS: path to the Z-score data: 
-# Rscript outlier_calling/identify_global_outliers.R \
+# Rscript ${BASEDIR}/outlier_calling/identify_global_outliers.R \
 #         --OUTLIERS=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt \
 #         --METHOD=proportion
 
 # # Removes global outlier individuals, either defined based on the proportion of genes called as outliers per individual relative to the population or 
 # the number of genes called as outliers, determined by setting 'proportion' or 'number' in `METHOD`. 
-# Writes out a new outlier file with `_globalOutliersRemoved` appended to the specified outlier txt file.
+# Writes out a new outlier file:
+        #  data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz_globalOutliersRemoved.txt.
+# I've also added two outputs:
+        # preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt.gz",
+        # data_v8/outliers/globalOutliers.txt
 
-# ### From the multi-tissue outliers, determine which tissues have extreme effects and outlier sharing across tissues
-
-# Rscript outlier_calling/extract_extreme_tissues.R \
-#     --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression.txt.gz \
-#     --EXP.DATA=${WorkDir}/preprocessing_v8/gtex_2017-06-05_normalized_expression_v8ciseQTLs_removed.txt.gz \
-
-
-# # Generates figures in `figures/GTEXv8_pair_jaccard.pdf`.
+### From the multi-tissue outliers, determine which tissues have extreme effects and outlier sharing across tissues
+Rscript ${BASEDIR}/outlier_calling/extract_extreme_tissues.R \
+    --Z.SCORES=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt \
+    --EXP.DATA=${WorkDir}/preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt.gz
+# Generates figures in `figures/GTEXv8_pair_jaccard.pdf`.
 
 
-# ### Select tissues and individuals for downstream analyses (still from correction.md)
-# Rscript preprocessing/filter_tissues_individuals.R
-# # Must be run from the upper level directory of the repo (e.g., the location of this readme).
-# # Generates `preprocessing_v8/gtex_2017-06-05_v8_design_passed.txt`, `preprocessing_v8/gtex_2017-06-05_v8_individuals_passed.txt`, `preprocessing_v8/gtex_2017-06-05_v8_tissues_passed.txt`, and `preprocessing_v8/gtex_2017-06-05_v8_normalized_expression.subset.txt.gz`. Also produces summary figures `figures/gtex_v8_design.pdf`. The subset file filtered for missingness is used in correlation-outlier calling. No missingness filter is applied for multi-tissue eOutlier calling.
+### Select tissues and individuals for downstream analyses (still from correction.md)
+Rscript ${BASEDIR}/preprocessing/filter_tissues_individuals.R
+# Must be run from the upper level directory of the repo (e.g., the location of this readme).
+# Generates `preprocessing_v8/gtex_2017-06-05_v8_design_passed.txt`, `preprocessing_v8/gtex_2017-06-05_v8_individuals_passed.txt`, `preprocessing_v8/gtex_2017-06-05_v8_tissues_passed.txt`, 
+# and `preprocessing_v8/gtex_2017-06-05_v8_normalized_expression.subset.txt.gz`. 
+# Also produces summary figures `figures/gtex_v8_design.pdf`. 
+# The subset file filtered for missingness is used in correlation-outlier calling. No missingness filter is applied for multi-tissue eOutlier calling.
 
