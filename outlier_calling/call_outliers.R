@@ -44,7 +44,7 @@ call.outliers <- function(data, nphen, zthresh) {
     test.stats = data.melted %>% group_by(Ind, Gene) %>%
         summarise(MedZ = median(Z, na.rm = T),
                   Df = sum(!is.na(Z)))
-    outliers = pick.outliers(test.stats, nphen, zthresh, medz = T)
+    outliers = pick.outliers(test.stats, nphen, zthresh)
     return(outliers)
 }
 
