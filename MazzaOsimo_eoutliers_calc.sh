@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=extract_extreme_tissues
+#SBATCH --job-name=filter_tissues_individuals
 #SBATCH --output=slurm_%x_%j.out
 #SBATCH -A MURRAY-SL3-CPU
 #SBATCH -p cclake
 #SBATCH --nodes=1
 #SBATCH --ntasks=16
-#SBATCH --time=6:00:00
+#SBATCH --time=1:00:00
 #SBATCH --mail-user=efo22@cam.ac.uk
 #SBATCH --mail-type=BEGIN,END,FAIL
 

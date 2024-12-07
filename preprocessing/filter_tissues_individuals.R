@@ -137,7 +137,7 @@ expr.subset = expr.subset[, c('Tissue', 'Gene', sort(inds.final))]
 
 ## Then subset to the genes expressed in each tissue that are either protein coding or lincRNA
 ## first reading in the list of autosomal protein-coding  & lincRNA genes
-autosomal.df = read.table(gencode_gene_genetypes),
+autosomal.df = read.table(gencode_gene_genetypes,
                           header = F, stringsAsFactors = F)
 autosomal.selected = autosomal.df[autosomal.df[, 2] %in% c('lincRNA', 'protein_coding'), 1]
 
