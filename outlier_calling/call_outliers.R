@@ -75,7 +75,7 @@ globalFile = opt$GLOBAL
 ##-- Analysis
 
 ## Read in the normalized data
-data = as.data.frame(fread(opt$Z.SCORES))
+data = as.data.frame(readr::read_tsv(opt$Z.SCORES))
 
 
 ##-- Call outliers using median Z-score

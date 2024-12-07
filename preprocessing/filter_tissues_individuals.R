@@ -8,8 +8,10 @@ require(gplots)
 require(stringr)
 require(data.table)
 
-baseDir = Sys.getenv('WorkDir')
-dir = paste0(baseDir, '/preprocessing_v8')
+baseDir = Sys.getenv('BASEDIR')
+WorkDir = Sys.getenv('WorkDir')
+gencode_gene_genetypes = Sys.getenv('gencode_gene_genetypes')
+dir = paste0(WorkDir, '/preprocessing_v8')
 
 ##---------------- FUNCTIONS
 ## theme for functions and plots below
@@ -50,7 +52,7 @@ plot.tissue.miss <- function(design, title = '', thresh = NULL) {
 ##---------------- MAIN
 
 ## Read in official GTEx colors file
-gtex.color.map = read.table(paste0(Sys.getenv('BASEDIR'),'/figures/gtex_tissue_colors.txt'), sep = '\t', header = T, stringsAsFactors = F)
+gtex.color.map = read.table(paste0(baseDir,'/figures/gtex_tissue_colors.txt'), sep = '\t', header = T, stringsAsFactors = F)
 gtex.colors = paste0('#', gtex.color.map$tissue_color_hex)
 names(gtex.colors) = gtex.color.map$tissue_site_detail_id
 
@@ -135,7 +137,7 @@ expr.subset = expr.subset[, c('Tissue', 'Gene', sort(inds.final))]
 
 ## Then subset to the genes expressed in each tissue that are either protein coding or lincRNA
 ## first reading in the list of autosomal protein-coding  & lincRNA genes
-autosomal.df = read.table(paste0(dir, '/gencode.v26.GRCh38.genes_genetypes_autosomal_PCandlinc_only.txt'),
+autosomal.df = read.table(gencode_gene_genetypes),
                           header = F, stringsAsFactors = F)
 autosomal.selected = autosomal.df[autosomal.df[, 2] %in% c('lincRNA', 'protein_coding'), 1]
 

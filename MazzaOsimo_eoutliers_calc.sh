@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=call_outliers
+#SBATCH --job-name=extract_extreme_tissues
 #SBATCH --output=slurm_%x_%j.out
 #SBATCH -A MURRAY-SL3-CPU
 #SBATCH -p cclake
@@ -29,14 +29,16 @@ mkdir -p preprocessing_v8/PEER_v8
 mkdir -p data_v8
 mkdir -p data_v8/outliers
 #define variables
-export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
 export peerdir=${WorkDir}/preprocessing_v8/PEER_v8
+# GTEx public data:
+export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
 export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
 export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
-export SAMPLE_TISSUES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
 export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
 export gtex_eqtl_dir=${GTEX_base}/eqtl
-## restricted data:
+# this file comes from https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_26/gencode.v26.annotation.gtf.gz converted into txt with agat:
+export gencode_gene_genetypes=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/gencode/gencode.v26.GRCh38.genes_genetypes_autosomal.txt
+## GTEx restricted data:
 export GTEX_WGS=${GTEX_base}/WGS/phg001796.v1.GTEx_v9_WGS_phased.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_944Indiv_Analysis_Freeze.SHAPEIT2_phased.vcf.gz
 export GTEX_PCs=${GTEX_base}/sample_attrib/phg001796.v1.GTEx_v9.genotype-qc.MULTI/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_support_files/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_953Indiv.20_Genotype_PCs.eigenvec.txt
 
@@ -53,13 +55,14 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 
 # source activate expr_preprocessing_bash_py2_env
 
+
+export SAMPLE_TISSUES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
 # #create sample tissues file
 # # The generated mapping file excludes flagged individuals and samples.
 # # Creates `preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt` and some files under `preprocessing_v8/PEER_v8/`.
 # cat $GTEX_SAMPLES | tail -n+2 | cut -f1,7,17 | sed 's/ - /_/' | sed 's/ /_/g' | sed 's/(//' | sed 's/)//' | sed 's/c-1/c1/' | awk '$3=="RNASEQ" {print $1"\t"$2}' > ${SAMPLE_TISSUES}
 
 # head ${SAMPLE_TISSUES}
-
 
 
 # #split expression by tissue
@@ -144,7 +147,7 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 conda deactivate
 source activate eoutliers_calc_R_env2
 # Rscript ${BASEDIR}/outlier_calling/call_outliers.R \
-#         --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt \
+#         --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt.gz \
 #         --OUT.PREFIX=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs \
 #         --N.PHEN=5 
 
@@ -171,11 +174,11 @@ source activate eoutliers_calc_R_env2
         # preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt.gz",
         # data_v8/outliers/globalOutliers.txt
 
-### From the multi-tissue outliers, determine which tissues have extreme effects and outlier sharing across tissues
-Rscript ${BASEDIR}/outlier_calling/extract_extreme_tissues.R \
-    --Z.SCORES=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt \
-    --EXP.DATA=${WorkDir}/preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt.gz
-# Generates figures in `figures/GTEXv8_pair_jaccard.pdf`.
+# ### From the multi-tissue outliers, determine which tissues have extreme effects and outlier sharing across tissues
+# Rscript ${BASEDIR}/outlier_calling/extract_extreme_tissues.R \
+#     --Z.SCORES=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs.medz.txt \
+#     --EXP.DATA=${WorkDir}/preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt.gz
+# # Generates figures in `figures/GTEXv8_pair_jaccard.pdf`.
 
 
 ### Select tissues and individuals for downstream analyses (still from correction.md)
