@@ -30,6 +30,8 @@ mkdir -p data_v8
 mkdir -p data_v8/outliers
 #define variables
 export peerdir=${WorkDir}/preprocessing_v8/PEER_v8
+export SAMPLE_TISSUES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt #created below
+
 # GTEx public data:
 export GTEX_base=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx
 export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
@@ -56,7 +58,6 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 # source activate expr_preprocessing_bash_py2_env
 
 
-export SAMPLE_TISSUES=${WorkDir}/preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt
 # #create sample tissues file
 # # The generated mapping file excludes flagged individuals and samples.
 # # Creates `preprocessing_v8/gtex_2017-06-05_v8_samples_tissues.txt` and some files under `preprocessing_v8/PEER_v8/`.
