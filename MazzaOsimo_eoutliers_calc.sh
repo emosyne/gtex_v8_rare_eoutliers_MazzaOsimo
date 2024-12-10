@@ -189,6 +189,6 @@ source activate R_dplyr
 Rscript ${BASEDIR}/preprocessing/filter_tissues_individuals.R
 # Must be run from the upper level directory of the repo (e.g., the location of this readme).
 # Generates `preprocessing_v8/gtex_2017-06-05_v8_design_passed.txt`, `preprocessing_v8/gtex_2017-06-05_v8_individuals_passed.txt`, `preprocessing_v8/gtex_2017-06-05_v8_tissues_passed.txt`, 
-# and `preprocessing_v8/gtex_2017-06-05_v8_normalized_expression.subset.txt.gz`. 
+# and `gtex_2017-06-05_v8_normalized_expression.subset.txt.gz`. 
 # Also produces summary figures `figures/gtex_v8_design.pdf`. 
 # The subset file filtered for missingness is used in correlation-outlier calling. No missingness filter is applied for multi-tissue eOutlier calling.
