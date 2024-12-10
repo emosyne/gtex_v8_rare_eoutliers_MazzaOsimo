@@ -11,7 +11,7 @@ require(data.table)
 baseDir = Sys.getenv('BASEDIR')
 WorkDir = Sys.getenv('WorkDir')
 gencode_gene_genetypes = Sys.getenv('gencode_gene_genetypes')
-dir = paste0(WorkDir, '/preprocessing_v8')
+preprocessing_dir = paste0(WorkDir, '/preprocessing_v8')
 
 ##---------------- FUNCTIONS
 ## theme for functions and plots below
@@ -57,16 +57,16 @@ gtex.colors = paste0('#', gtex.color.map$tissue_color_hex)
 names(gtex.colors) = gtex.color.map$tissue_site_detail_id
 
 ## Read in list of EA samples
-eas.wgs = scan("/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/GTEx/sample_attrib/gtex_v10_whiteRace_ids.txt", what = character())
+eas.wgs = scan(Sys.getenv('white_ids'), what = character())
 
 ## Read in sample to tissue correspondence and turn it into a individual to tissue correspondence
-meta = read.table(paste0(dir, '/gtex_2017-06-05_v8_samples_tissues.txt'), header = F,
+meta = read.table(paste0(preprocessing_dir, '/gtex_2017-06-05_v8_samples_tissues.txt'), header = F,
                   stringsAsFactors = F, col.names = c('Sample', 'Tissue'))
 meta$Id = apply(str_split_fixed(meta$Sample, '-', 6)[, c(1:2)], 1, paste, collapse = '-')
 
 ## Read in normalized expression data and subset above correspondance to individuals with corrected data
 ## (this is a subset because it only includes individuals that were genotyped)
-expr = readr::read_tsv("/home/efo22/murray/share/eosimo_fmazzarotto/gtex_v8_rare_eoutliers_MazzaOsimo/temp_workdir/preprocessing_v8/gtex_normalized_expression_global_outliers_removed.txt.gz")
+expr = readr::read_tsv(paste0(preprocessing_dir,"/gtex_normalized_expression_global_outliers_removed.txt.gz"))
 colnames(expr) = gsub("[.]", "-", colnames(expr))
 meta = meta[meta$Id %in% colnames(expr), ]
 
@@ -123,11 +123,11 @@ dev.off()
 cat('Average missingness', mean(exp.design), '\n')
 
 ## Write out selected tissues and individuals
-write.table(sort(inds.final), paste0(dir, '/gtex_2017-06-05_v8_individuals_passed.txt'),
+write.table(sort(inds.final), paste0(preprocessing_dir, '/gtex_2017-06-05_v8_individuals_passed.txt'),
             sep = '\t', quote = F, col.names = F, row.names = F)
-write.table(sort(tissues.final), paste0(dir, '/gtex_2017-06-05_v8_tissues_passed.txt'),
+write.table(sort(tissues.final), paste0(preprocessing_dir, '/gtex_2017-06-05_v8_tissues_passed.txt'),
             sep = '\t', quote = F, col.names = F, row.names = F)
-write.table(exp.design, paste0(dir, '/gtex_2017-06-05_v8_design_passed.txt'),
+write.table(exp.design, paste0(preprocessing_dir, '/gtex_2017-06-05_v8_design_passed.txt'),
             sep = '\t', quote = F, col.names = T, row.names = T)
 
 ## Subset the normalized expression file to the individuals and tissues selected
@@ -152,6 +152,6 @@ expr.subset = expr.subset[which(expr.subset$Gene %in% genes.keep), ]
 expr.subset = as.data.frame(expr.subset)
 expr.subset[, 3:ncol(expr.subset)] = t(scale(t(expr.subset[, 3:ncol(expr.subset)])))
 
-gzout = gzfile(paste0(dir, '/gtex_2017-06-05_normalized_expression_v8ciseQTLs_removed.subset.txt.gz'), 'w')
+gzout = gzfile(paste0(WorkDir, '/gtex_2017-06-05_normalized_expression_v8ciseQTLs_removed.subset.txt.gz'), 'w')
 write.table(expr.subset, gzout, sep = '\t', quote = F, col.names = T, row.names = F)
 close(gzout)

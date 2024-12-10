@@ -38,6 +38,7 @@ export GTEX_expr=${GTEX_base}/expression/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1
 export GTEX_SAMPLES=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
 export GTEX_SUBJECTSv8=${GTEX_base}/sample_attrib/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
 export gtex_eqtl_dir=${GTEX_base}/eqtl
+export white_ids=${GTEX_base}/sample_attrib/gtex_v10_whiteRace_ids.txt
 # this file comes from https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_26/gencode.v26.annotation.gtf.gz converted into txt with agat:
 export gencode_gene_genetypes=/home/efo22/murray/share/eosimo_fmazzarotto/resources/DB/gencode/gencode.v26.GRCh38.genes_genetypes_autosomal.txt
 ## GTEx restricted data:
@@ -145,8 +146,8 @@ source /home/efo22/miniconda3/etc/profile.d/conda.sh
 
 
 ### Run outlier calling
-conda deactivate
-source activate eoutliers_calc_R_env2
+# conda deactivate
+# source activate eoutliers_calc_R_env2
 # Rscript ${BASEDIR}/outlier_calling/call_outliers.R \
 #         --Z.SCORES=${WorkDir}/preprocessing_v8/gtex_normalized_expression.txt.gz \
 #         --OUT.PREFIX=${WorkDir}/data_v8/outliers/gtex.outlier.controls.v8ciseQTLs \
@@ -183,10 +184,11 @@ source activate eoutliers_calc_R_env2
 
 
 ### Select tissues and individuals for downstream analyses (still from correction.md)
+conda deactivate
+source activate R_dplyr
 Rscript ${BASEDIR}/preprocessing/filter_tissues_individuals.R
 # Must be run from the upper level directory of the repo (e.g., the location of this readme).
 # Generates `preprocessing_v8/gtex_2017-06-05_v8_design_passed.txt`, `preprocessing_v8/gtex_2017-06-05_v8_individuals_passed.txt`, `preprocessing_v8/gtex_2017-06-05_v8_tissues_passed.txt`, 
 # and `preprocessing_v8/gtex_2017-06-05_v8_normalized_expression.subset.txt.gz`. 
 # Also produces summary figures `figures/gtex_v8_design.pdf`. 
 # The subset file filtered for missingness is used in correlation-outlier calling. No missingness filter is applied for multi-tissue eOutlier calling.
-
